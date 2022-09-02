@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        %sveltekit.head%
+
+        <!-- The custom font. -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400;700;900&display=swap" rel="stylesheet">
+
+        <style>
+            :root {
+                --color-primary-light: #fff1cb ;
+                --color-primary: #FCBA04;
+
+                --color-neutral:       #63616d;
+                --color-neutral-light: #edede9;
+                --color-neutral-dark:  black;
+
+                --color-success: #47A025;
+                --color-danger: #DF2935;
+
+                --border-radius:    0.25rem;
+                --border-radius-lg: 0.4rem;
+
+                --font-primary: 'Source Sans Pro', sans-serif;
+
+                --font-size-xs: 12px;
+                --font-size-sm: 14px;
+                --font-size:    18px;
+                --font-size-lg: 24px;
+
+                --font-weight-light: 300;
+                --font-weight-reg: 400;
+                --font-weight-bold: 700;
+                --font-weight-black: 900;
+
+                --wrap-width: 1180px;
+            }
+            /* Global Focus. */
+            *:focus {
+                outline-offset: 0.1rem;
+                outline: 0.1rem dashed var(--color-neutral);
+                border-radius: var(--border-radius);
+            }
+            body {
+                font-family: 'Source Sans Pro', sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        %sveltekit.body%
+    </body>
+</html>

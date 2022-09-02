@@ -56,3 +56,7 @@ docker-compose up --build
 ```
 3. Test the connection at [localhost:3000](localhost:3000)
 4. ~~Restore the database with the provided MySQL database dump.~~
+5. When running the image from this point forward use to run the container detached:
+```
+docker-compose up -d
+```

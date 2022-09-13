@@ -7,6 +7,8 @@ import * as bcrypt from 'bcrypt';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function post(event: RequestEvent) {
+    // TODO Check if they are already logged in.
+
     /** A generic error response for when something fails. */
     const ambiguousErrorMessage = 'The email or password you entered is incorrect.';
     /** The FormData received in the request. */

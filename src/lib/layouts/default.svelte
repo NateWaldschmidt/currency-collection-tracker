@@ -1,6 +1,6 @@
 <script lang="ts">
     import Header from "$lib/components/header.svelte";
-import { link } from "joi";
+    import Notifications from "$lib/components/notifications/notifications.svelte";
 
     /** The heading for the page. */
     export let heading = 'Welcome.';
@@ -13,6 +13,9 @@ import { link } from "joi";
 </svelte:head>
 
 <Header />
+
+<!-- A place for all the notifications to be displayed. -->
+<Notifications />
 
 <main>
     <div id="heading-container">

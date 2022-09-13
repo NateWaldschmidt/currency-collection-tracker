@@ -2,6 +2,7 @@
     import DefaultLayout from '$lib/layouts/default.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
+    import { notifications } from '$lib/stores/notification-store';
 
     function handleSubmit(e: SubmitEvent) {
         /** The form being submitted. */
@@ -14,7 +15,12 @@
         xhr.addEventListener('load', () => {
             if (xhr.status === 201) {
                 const body = JSON.parse(xhr.responseText);
-                console.log(body.success);
+                notifications.add({
+                    id: '1',
+                    title: 'Successfully Signed In',
+                    message: body.success,
+                    type: 'success',
+                });
             }
         })
 

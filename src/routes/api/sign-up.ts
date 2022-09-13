@@ -8,6 +8,8 @@ import Joi from 'joi';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function post(event: RequestEvent) {
+    // TODO Check if they are already logged in.
+    
     /** The parts of the request body to search for. */
     const requestBody = RequestHelper.serializeFormData(await event.request.formData());
 
@@ -30,7 +32,7 @@ export async function post(event: RequestEvent) {
         /** A response if the account already exists in some way (email or display name). */
         const existingAccountResponse = ResponseHelper.createErrorResponse(
             400,
-            'There is an account that exists with these credentials already.',
+            'This account exists already.',
         );
 
         // Checks for an existing user with this email.

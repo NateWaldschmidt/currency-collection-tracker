@@ -2,19 +2,34 @@
     import DefaultLayout from '$lib/layouts/default.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
+    import { notifications } from '$lib/stores/notification-store';
 
-    function handleSubmit(e: SubmitEvent) {
-        /** The form element that the submit event is coming from. */
-        const form = (<HTMLFormElement> e.target);
-        /** The form data to be sent with the request. */
-        const fd = new FormData(form);
-        /** The request handler. */
+    /**
+     * Handles submitting the form to log the user in.
+     */
+    function handleSubmit(this: HTMLFormElement) {
+        const fd = new FormData(this);
         const xhr = new XMLHttpRequest();
 
         xhr.addEventListener('load', () => {
-            if (xhr.status === 201) {
-                const body = JSON.parse(xhr.responseText);
-                console.log(body.success);
+            const body = JSON.parse(xhr.responseText);
+            if (xhr.status === 302) {
+                notifications.add({
+                    id: '1',
+                    title: 'Successfully Signed In',
+                    message: 'Thank you for signing in.',
+                    type: 'success',
+                });
+            } else {
+                // Resets the password field(s).
+                this.querySelectorAll('input [type="password"]').forEach((element) => element.value = '')
+
+                notifications.add({
+                    id: '1',
+                    title: 'Could Not Sign In',
+                    message: body.error,
+                    type: 'danger',
+                });
             }
         });
         xhr.open('POST', '/api/sign-in');

@@ -1,0 +1,107 @@
+/* All the CSS Variables */
+:root {
+    /* Primary/ Brand Colors. */
+    --color-primary-light: #FFF1CB ;
+    --color-primary: #FCBA04;
+    --color-primary-dark: #1A1301;
+    --color-primary-bg: var(var(--color-primary-light));
+    --color-primary-accent: var(var(--color-primary-dark));
+
+    /* Neutral Colors. */
+    --color-neutral: #63616D;
+    --color-neutral-light: #EDEDE9;
+    --color-neutral-dark: black;
+    --color-neutral-bg: var(var(--color-neutral-light));
+    --color-neutral-accent: var(var(--color-neutral-dark));
+
+    /* Success Colors. */
+    --color-success-light: #CBE7C0;
+    --color-success: #47A025;
+    --color-success-dark: #0E2704;
+    --color-success-bg: var(--color-success-light);
+    --color-success-accent: var(--color-success-dark);
+
+    /* Danger/ Error Colors. */
+    --color-danger-light: #f5d0d3;
+    --color-danger: #DF2935;
+    --color-danger-dark: #300407;
+    --color-danger-bg: var(--color-danger-light);
+    --color-danger-accent: var(--color-danger-dark);
+
+    --border-radius: 0.25rem;
+    --border-radius-lg: 0.4rem;
+
+    --font-primary: 'Source Sans Pro', sans-serif;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size: 1.125rem;
+    --font-size-lg: 1.5rem;
+
+    --font-weight-light: 300;
+    --font-weight-reg: 400;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+
+    --wrap-width: 75rem;
+}
+/* Global Focus. */
+*:focus {
+    outline-offset: 0.1rem;
+    outline: 0.1rem dashed var(--color-neutral);
+    border-radius: var(--border-radius);
+}
+/* Default font. */
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Fonts */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 200;
+    src: url('/static/fonts/source-sans-pro-v21-latin-200.eot'); /* IE9 Compat Modes */
+    src: local(''),
+        url('/static/fonts/source-sans-pro-v21-latin-200.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+        url('/static/fonts/source-sans-pro-v21-latin-200.woff2') format('woff2'), /* Super Modern Browsers */
+        url('/static/fonts/source-sans-pro-v21-latin-200.woff') format('woff'), /* Modern Browsers */
+        url('/static/fonts/source-sans-pro-v21-latin-200.ttf') format('truetype'), /* Safari, Android, iOS */
+        url('/static/fonts/source-sans-pro-v21-latin-200.svg#SourceSansPro') format('svg'); /* Legacy iOS */
+    }
+@font-face {
+font-family: 'Source Sans Pro';
+font-style: normal;
+font-weight: 400;
+src: url('/static/fonts/source-sans-pro-v21-latin-regular.eot'); /* IE9 Compat Modes */
+src: local(''),
+    url('/static/fonts/source-sans-pro-v21-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/static/fonts/source-sans-pro-v21-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('/static/fonts/source-sans-pro-v21-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('/static/fonts/source-sans-pro-v21-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/static/fonts/source-sans-pro-v21-latin-regular.svg#SourceSansPro') format('svg'); /* Legacy iOS */
+}
+@font-face {
+font-family: 'Source Sans Pro';
+font-style: normal;
+font-weight: 700;
+src: url('/static/fonts/source-sans-pro-v21-latin-700.eot'); /* IE9 Compat Modes */
+src: local(''),
+    url('/static/fonts/source-sans-pro-v21-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/static/fonts/source-sans-pro-v21-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+    url('/static/fonts/source-sans-pro-v21-latin-700.woff') format('woff'), /* Modern Browsers */
+    url('/static/fonts/source-sans-pro-v21-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/static/fonts/source-sans-pro-v21-latin-700.svg#SourceSansPro') format('svg'); /* Legacy iOS */
+}
+@font-face {
+font-family: 'Source Sans Pro';
+font-style: normal;
+font-weight: 900;
+src: url('/static/fonts/source-sans-pro-v21-latin-900.eot'); /* IE9 Compat Modes */
+src: local(''),
+    url('/static/fonts/source-sans-pro-v21-latin-900.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/static/fonts/source-sans-pro-v21-latin-900.woff2') format('woff2'), /* Super Modern Browsers */
+    url('/static/fonts/source-sans-pro-v21-latin-900.woff') format('woff'), /* Modern Browsers */
+    url('/static/fonts/source-sans-pro-v21-latin-900.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/static/fonts/source-sans-pro-v21-latin-900.svg#SourceSansPro') format('svg'); /* Legacy iOS */
+}

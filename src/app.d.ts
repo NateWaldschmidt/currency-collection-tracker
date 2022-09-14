@@ -10,7 +10,9 @@ declare global {
 			user?: TokenPayload | null,
 		}
 		// interface Platform {}
-		// interface Session {}
+		interface Session {
+			user?: TokenPayload | null,
+		}
 		// interface Stuff {}
 	}
 }

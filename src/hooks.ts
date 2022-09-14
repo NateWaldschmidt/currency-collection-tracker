@@ -2,9 +2,10 @@ import type { TokenPayload } from '$lib/utilities/auth';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import type { GetSession, Handle } from '@sveltejs/kit';
 
 /** @type {import('@sveltejs/kit').Handle} */
-export async function handle({ event, resolve }) {
+export const handle: Handle = function ({ event, resolve }) {
     // Ensures the access token is set.
     if (!process.env['ACCESS_TOKEN_SECRET']) {
         throw new ReferenceError('Secret access token cannot be found.');
@@ -25,6 +26,7 @@ export async function handle({ event, resolve }) {
             displayName: tokenPayload.displayName,
             firstName: tokenPayload.firstName,
             lastName: tokenPayload.lastName,
+            exp: tokenPayload.exp,
         }
 
     } else {
@@ -35,7 +37,7 @@ export async function handle({ event, resolve }) {
 }
 
 /** @type {import('@sveltejs/kit').GetSession} */
-export function getSession(event) {
+export const getSession: GetSession = function(event) {
     return event?.locals?.user ? {
         user: {
             id: event.locals.user.id,

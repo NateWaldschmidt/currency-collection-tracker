@@ -198,7 +198,7 @@
             background-color: var(--color-primary);
         }
         tr:nth-child(even) {
-            background-color: var(--color-primary-light);
+            background-color: var(--color-primary-bg);
         }
 
         th {

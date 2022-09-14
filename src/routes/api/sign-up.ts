@@ -8,7 +8,10 @@ import Joi from 'joi';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function post(event: RequestEvent) {
-    // TODO Check if they are already logged in.
+    // Checks if the user is already signed in.
+    if (event.locals.user) {
+        return ResponseHelper.createErrorResponse(400, 'You are already signed in to an account.');
+    }
     
     /** The parts of the request body to search for. */
     const requestBody = RequestHelper.serializeFormData(await event.request.formData());

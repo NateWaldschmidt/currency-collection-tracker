@@ -3,6 +3,7 @@
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
     import { notifications } from '$lib/stores/notification-store';
+import { goto } from '$app/navigation';
 
     /**
      * Handles submitting the form to log the user in.
@@ -13,16 +14,17 @@
 
         xhr.addEventListener('load', () => {
             const body = JSON.parse(xhr.responseText);
-            if (xhr.status === 302) {
+            if (xhr.status === 200) {
                 notifications.add({
                     id: '1',
                     title: 'Successfully Signed In',
                     message: 'Thank you for signing in.',
                     type: 'success',
                 });
+                goto('/');
             } else {
                 // Resets the password field(s).
-                this.querySelectorAll('input [type="password"]').forEach((element) => element.value = '')
+                this.querySelectorAll('input [type="password"]').forEach((element) => (<HTMLInputElement> element).value = '')
 
                 notifications.add({
                     id: '1',

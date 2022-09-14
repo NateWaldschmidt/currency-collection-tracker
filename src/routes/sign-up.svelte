@@ -3,6 +3,7 @@
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
     import { notifications } from '$lib/stores/notification-store';
+import { goto } from '$app/navigation';
 
     function handleSubmit(e: SubmitEvent) {
         /** The form being submitted. */
@@ -21,6 +22,8 @@
                     message: body.success,
                     type: 'success',
                 });
+
+                goto('/');
             }
         })
 

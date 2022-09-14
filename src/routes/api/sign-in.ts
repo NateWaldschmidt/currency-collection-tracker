@@ -7,7 +7,10 @@ import * as bcrypt from 'bcrypt';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function post(event: RequestEvent) {
-    // TODO Check if they are already logged in.
+    // Checks if the user is already signed in.
+    if (event.locals.user) {
+        return ResponseHelper.createErrorResponse(400, 'You are already signed in to an account.');
+    }
 
     /** A generic error response for when something fails. */
     const ambiguousErrorMessage = 'The email or password you entered is incorrect.';
@@ -20,7 +23,9 @@ export async function post(event: RequestEvent) {
     }
 
     // Missing a required field in the request body.
-    if (!requestBody.email || !requestBody.password) return ResponseHelper.createErrorResponse(400, 'Missing a required field to authenticate.');
+    if (!requestBody.email || !requestBody.password) {
+        return ResponseHelper.createErrorResponse(400, 'Missing a required field to authenticate.');
+    }
 
     try {
         /** The database connection. */
@@ -34,7 +39,9 @@ export async function post(event: RequestEvent) {
         // This error message displays on purpose as to not give away more information than necessary.
         if (!user) return ResponseHelper.createErrorResponse(400, ambiguousErrorMessage);
         // Validates the user has all necessary components for generating a token.
-        if (!user.id || !user.email || !user.hashedPassword || !user.displayName) return ResponseHelper.createErrorResponse(500, 'There is a problem with this account, please contact an admin.');
+        if (!user.id || !user.email || !user.hashedPassword || !user.displayName) {
+            return ResponseHelper.createErrorResponse(500, 'There is a problem with this account, please contact an admin.');
+        }
 
         // Validate the user.
         if (await bcrypt.compare(requestBody.password, user.hashedPassword)) {
@@ -56,14 +63,13 @@ export async function post(event: RequestEvent) {
             conn.end();
             return {
                 headers: { 'Set-Cookie': Auth.createTokenCookie(tokenPayload, (currentDate + (tokenValidationTime * 60 * 1000))) },
-                status: 302,
-                redirect: '/sign-in',
+                status: 200,
             }
         } else {
             conn.end();
             return ResponseHelper.createErrorResponse(400, ambiguousErrorMessage);
         }
     } catch (err) {
-        return ResponseHelper.createErrorResponse(500, 'There was an error processing your request, please try again later.');
+        return ResponseHelper.createErrorResponse(500, ResponseHelper.GENERIC_SERVER_ERROR);
     }
 }

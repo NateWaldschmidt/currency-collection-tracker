@@ -4,15 +4,17 @@
     --color-primary-light: #FFF1CB ;
     --color-primary: #FCBA04;
     --color-primary-dark: #1A1301;
-    --color-primary-bg: var(var(--color-primary-light));
-    --color-primary-accent: var(var(--color-primary-dark));
+    --color-primary-font: var(--color-primary-dark);
+    --color-primary-bg: var(--color-primary-light);
+    --color-primary-accent: var(--color-primary-dark);
 
     /* Neutral Colors. */
     --color-neutral: #63616D;
     --color-neutral-light: #EDEDE9;
     --color-neutral-dark: black;
-    --color-neutral-bg: var(var(--color-neutral-light));
-    --color-neutral-accent: var(var(--color-neutral-dark));
+    --color-neutral-font: var(--color-neutral-dark);
+    --color-neutral-bg: var(--color-neutral-light);
+    --color-neutral-accent: var(--color-neutral-dark);
 
     /* Success Colors. */
     --color-success-light: #CBE7C0;

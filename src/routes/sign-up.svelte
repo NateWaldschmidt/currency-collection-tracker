@@ -2,8 +2,9 @@
     import DefaultLayout from '$lib/layouts/default.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
+    import Link from '$lib/components/inputs/link.svelte';
     import { notifications } from '$lib/stores/notification-store';
-import { goto } from '$app/navigation';
+    import { goto } from '$app/navigation';
 
     function handleSubmit(e: SubmitEvent) {
         /** The form being submitted. */
@@ -78,7 +79,7 @@ import { goto } from '$app/navigation';
 
         <div id="submit-container">
             <Button type={"submit"}>Sign In</Button>
-            <a href="/sign-in">Already have an account? Sign in.</a>
+            <Link href={"/sign-in"} size={'xs'}>Already have an account? Sign in.</Link>
         </div>
     </form>
 </DefaultLayout>
@@ -103,9 +104,5 @@ import { goto } from '$app/navigation';
         display: flex;
         align-items: center;
         gap: 0.5rem;
-
-        a {
-            font-size: 0.85rem;
-        }
     }
 </style>

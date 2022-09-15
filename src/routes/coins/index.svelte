@@ -13,6 +13,7 @@
 
 <script lang="ts">
     import DefaultLayout from '$lib/layouts/default.svelte';
+    import Link from '$lib/components/inputs/link.svelte';
     import type CoinGroup from '$lib/models/coin-group';
 
     /** The Groups of Coins. */
@@ -25,7 +26,10 @@
             <article>
                 <img src="#" alt="{coinGroup.title} Obverse" class="obverse-img" />
                 <img src="#" alt="{coinGroup.title} Reverse" class="reverse-img" />
-                <a href="/coins/groups/{ coinGroup.id?.toString() }">{ coinGroup.title }</a>
+                
+                <Link href={`/coins/groups/${coinGroup.id?.toString()}`}>
+                    { coinGroup.title }
+                </Link>
             </article>
         {/each}
     </section>
@@ -46,9 +50,5 @@
         grid-template-columns: 1fr 1fr;
 
         width: 20rem;
-
-        & > a {
-            margin-top: 0.5rem;
-        }
     }
 </style>

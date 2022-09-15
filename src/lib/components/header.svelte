@@ -2,6 +2,7 @@
     import { session } from '$app/stores';
     import { notifications } from '$lib/stores/notification-store';
     import Button from '$lib/components/inputs/button.svelte';
+    import Link from '$lib/components/inputs/link.svelte';
 
     /**
      * Handles the sign out of a user.
@@ -28,10 +29,10 @@
 
 <header>
     <nav>
-        <a class="title-site" href="/">Currency Collection Tracker</a>
+        <Link href="/">Currency Collection Tracker</Link>
         <div id="center-navigation">
-            <a href="/coins">Coins</a>
-            <a href="/collections">Collections</a>
+            <Link href="/coins">Coins</Link>
+            <Link href="/collections">Collections</Link>
         </div>
         <div id="account-info">
             {#if !$session.user}
@@ -46,7 +47,7 @@
     </nav>
 </header>
 
-<style lang="scss" scoped>
+<style lang="scss">
     nav {
         display: flex;
         align-items: center;

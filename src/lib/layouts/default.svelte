@@ -1,6 +1,7 @@
 <script lang="ts">
     import Header from "$lib/components/header.svelte";
     import Notifications from "$lib/components/notifications/notifications.svelte";
+    import Link from '$lib/components/inputs/link.svelte'
 
     /** The heading for the page. */
     export let heading = 'Welcome.';
@@ -23,7 +24,7 @@
         <div id="crumbs">
             {#each crumbs as {link, title}, i}
                 {#if i !== 0}<p>></p>{/if}
-                <a href="{ link }">{ title }</a>
+                <Link href={link}>{ title }</Link>
             {/each}
         </div>
     </div>

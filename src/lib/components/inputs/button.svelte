@@ -30,11 +30,11 @@
 
         padding: 0.25rem 0.75rem;
 
-        border: 1px solid var(--color-neutral);
+        border: 1px solid var(--color-neutral-accent);
         border-radius: var(--border-radius);
 
-        color: var(--color-neutral);
-        background-color: var(--color-neutral-light);
+        color: var(--color-neutral-font);
+        background-color: var(--color-neutral-bg);
 
         font-family: var(--font-primary);
         font-size: 0.875rem;
@@ -44,7 +44,7 @@
             cursor: pointer;
 
             &:hover {
-                background-color: var(--color-neutral);
+                background-color: var(--color-neutral-font);
 
                 color: white;
             }

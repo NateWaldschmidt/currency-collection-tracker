@@ -29,7 +29,9 @@
 
 <header>
     <nav>
-        <Link href="/">Currency Collection Tracker</Link>
+        <div id="brand-container">
+            <Link href="/">Currency Collection Tracker</Link>
+        </div>
         <div id="center-navigation">
             <Link href="/coins">Coins</Link>
             <Link href="/collections">Collections</Link>
@@ -49,23 +51,44 @@
 
 <style lang="scss">
     nav {
-        display: flex;
+        display: grid;
+        grid-template-columns: 16rem auto 16rem;
         align-items: center;
         justify-content: space-between;
 
         width: 100%;
         max-width: var(--wrap-width);
         margin: 0 auto;
+
+        @media only screen and (max-width: 600px) {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            align-items: center;
+        }
+    }
+
+    #brand-container {
+        @media only screen and (max-width: 600px) {
+            text-align: center;
+        }
     }
 
     #account-info {
         display: flex;
         flex-direction: column;
+        justify-content: flex-end;
         gap: 0.5rem;
+        max-width: 12rem;
+        margin-left: auto;
+
+        @media only screen and (max-width: 600px) {
+            margin: 0 auto;
+        }
     }
 
     #center-navigation {
         display: flex;
         gap: 1.5rem;
+        justify-content: center;
     }
 </style>

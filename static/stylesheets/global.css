@@ -48,7 +48,7 @@
     --wrap-width: 75rem;
 }
 /* Global Focus. */
-*:focus {
+body *:focus {
     outline-offset: 0.1rem;
     outline: 0.1rem dashed var(--color-neutral);
     border-radius: var(--border-radius);

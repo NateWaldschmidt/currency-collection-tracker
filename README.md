@@ -1,5 +1,5 @@
 # Currency Collection Tracker
-Created and Maintained by Nathaniel Waldschmidt
+Created and Maintained by [Nathaniel Waldschmidt](https://www.linkedin.com/in/nathaniel-waldschmidt)
 
 The Currency Collection Tracker is a system intended to track your collection of United States currency. The application will be capable of tracking both coins and paper currency and will provide historical information for both forms. Collections will be capable of being tracked in multiple formats including lists, grids, and custom formats to match which ever form you collect your numismatic collectables.
 

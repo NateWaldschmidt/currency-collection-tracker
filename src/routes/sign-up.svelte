@@ -1,5 +1,5 @@
 <script lang="ts">
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    import BaseLayout from '$lib/layouts/base.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
     import Link from '$lib/components/inputs/link.svelte';
@@ -33,7 +33,7 @@
     }
 </script>
 
-<DefaultLayout heading="Create Account">
+<BaseLayout heading="Create Account">
     <form on:submit|preventDefault={handleSubmit}>
         <Input
         label={"Email"}
@@ -82,7 +82,7 @@
             <Link href={"/sign-in"} size={'xs'}>Already have an account? Sign in.</Link>
         </div>
     </form>
-</DefaultLayout>
+</BaseLayout>
 
 <style lang="scss">
     form {

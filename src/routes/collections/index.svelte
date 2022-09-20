@@ -1,5 +1,5 @@
 <script lang="ts">
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    import BaseLayout from '$lib/layouts/base.svelte';
     import MaxContainer from '$lib/layouts/max-container.svelte';
     import Button from '$lib/components/inputs/button.svelte';
 
@@ -20,7 +20,7 @@
     }
 </script>
 
-<DefaultLayout heading={"Your Collections"}>
+<BaseLayout heading={"Your Collections"}>
     <MaxContainer tag={'section'}>
         <article class="collection-card">
             <h2 class="title">Lincoln Penny Collection</h2>
@@ -58,7 +58,7 @@
             <Button href="/collection/id">View</Button>
         </article>
     </MaxContainer>
-</DefaultLayout>
+</BaseLayout>
 
 <style lang="scss">
     .collection-card {

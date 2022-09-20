@@ -1,12 +1,14 @@
 <script context="module" lang="ts">
+    import type { Load } from '@sveltejs/kit';
+
     /** @type {import('./__types/[slug]').Load} */
-    export async function load({ params, fetch, session, stuff }) {
+    export const load: Load = async function({ params, fetch }) {
         const coinGroup = await fetch(`/api/coins/groups/${params.groupId}`);
         const coinGroupJson = await coinGroup.json();
 
         return {
             props: {
-                coinGroup: Object.assign(new CoinGroup(), coinGroupJson?.data.coinGroup),
+                coinGroup: new CoinGroup(coinGroupJson?.data.coinGroup),
                 coins: coinGroupJson?.data.coins.map((coinJson: CoinJson) => new Coin(coinJson)),
             }
         };
@@ -15,7 +17,7 @@
 <script lang="ts">
     import { session } from '$app/stores';
 
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    import BaseLayout from '$lib/layouts/base.svelte';
     import Coin, { type CoinJson } from '$lib/models/coin';
     import CoinGroup from '$lib/models/coin-group';
     import Table from '$lib/components/table.svelte'
@@ -29,7 +31,7 @@
     let filterStrikeId = [1];
 </script>
 
-<DefaultLayout heading={coinGroup.title}>
+<BaseLayout heading={coinGroup.title}>
     <!-- Strike Filters -->
     <div class="toggle-controls">
         <div class="toggle-box">
@@ -91,7 +93,7 @@
     ]}
     data={coins}
     ></Table>
-</DefaultLayout>
+</BaseLayout>
 
 <style lang="scss">
     .toggle-controls {

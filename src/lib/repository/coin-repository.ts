@@ -6,7 +6,6 @@ import UsMintRepository from './us-mint-repository';
 import CoinCompositionRepository from './coin-composition-repository';
 import CoinVarietyRepository from './coin-variety-repository';
 import CoinVariety, { type CoinVarietyJson } from '$lib/models/coin-variety';
-import { array } from 'joi';
 
 /** The repository for managing coins. */
 export default class CoinRepository extends Repository<Coin> {

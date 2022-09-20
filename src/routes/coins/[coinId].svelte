@@ -1,17 +1,19 @@
-<script context="module">
+<script context="module" lang="ts">
+    import type { Load } from "@sveltejs/kit";
+    
     /** @type {import('./__types/[slug]').Load} */
-    export async function load({ params, fetch, session, stuff }) {
+    export const load: Load = async function ({ params, fetch, session, stuff }) {
         const coin = await (await fetch(`/api/coins/${params.coinId}`)).json();
 
         return {
             props: {
-                coin: Object.assign(new Coin(), coin.data),
+                coin: new Coin(coin.data),
             }
         }
     }
 </script>
 <script lang="ts">
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    import BaseLayout from '$lib/layouts/base.svelte';
     import MaxContainer from '$lib/layouts/max-container.svelte';
     import Coin from '$lib/models/coin';
 
@@ -24,7 +26,7 @@
     ];
 </script>
 
-<DefaultLayout heading={ coin.getFullTitle() } crumbs={ crumbs }>
+<BaseLayout heading={ coin.getFullTitle() } crumbs={ crumbs }>
     <MaxContainer tag={"article"}>
         <!-- Coin Images -->
         <section id="coin-image-container">
@@ -50,7 +52,7 @@
             </article>
         </section>
     </MaxContainer>
-</DefaultLayout>
+</BaseLayout>
 
 <style lang="scss">
     #coin-image-container {

@@ -3,11 +3,17 @@ import CoinGroupRepository from "$lib/repository/coin-group-repository";
 import CoinRepository from "$lib/repository/coin-repository";
 import ResponseHelper from "$lib/utilities/response-helper";
 import BaseModel from "$lib/models/base-model";
+import type { RequestHandler } from "@sveltejs/kit";
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get({ params }) {
+/** Handles the request for a group ID and it's corresponding coins. */
+export const get: RequestHandler = async function({ params }) {
+    // Ensure the group ID is an integer.
+    if (!Number.isInteger(+params.groupId)) {
+        return ResponseHelper.createErrorResponse(400, 'The coin group ID is an invalid form, must be an integer.');
+    }
+
     /** The passed in coin group ID. */
-    const coinGroupId = params.groupId;
+    const coinGroupId = Number.parseInt(params.groupId);
 
     const conn = await createConnection();
 

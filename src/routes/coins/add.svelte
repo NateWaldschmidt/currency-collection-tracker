@@ -1,6 +1,8 @@
-<script context="module">
+<script context="module" lang="ts">
+    import type { Load } from '@sveltejs/kit';
+    
     /** @type {import('./__types/[slug]').Load} */
-    export async function load({ params, fetch, session, stuff }) {
+    export const load: Load = async function({ params, fetch, session, stuff }) {
         // Checks that the user is an admin.
         // TODO Change this to use a const.
         // if (session.user?.permissionLevel !== 'admin') return { status: 403 }
@@ -22,7 +24,7 @@
 </script>
 
 <script lang="ts">
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    import BaseLayout from '$lib/layouts/base.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
     import type UsMint from '$lib/models/us-mint';
@@ -63,7 +65,7 @@
     }
 </script>
 
-<DefaultLayout heading={"Add Coins"}>
+<BaseLayout heading={"Add Coins"}>
     <form on:submit|preventDefault={createCoin}>
         <!-- The year the coin was marked. -->
         <Input
@@ -170,7 +172,7 @@
 
         <Button type={'submit'}>Create Coin</Button>
     </form>
-</DefaultLayout>
+</BaseLayout>
 
 <style lang="scss">
     form {

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    import BaseLayout from '$lib/layouts/base.svelte';
 </script>
 
-<DefaultLayout heading={"Welcome to the CCT."}>
-</DefaultLayout>
+<BaseLayout heading={"Welcome to the CCT."}>
+</BaseLayout>

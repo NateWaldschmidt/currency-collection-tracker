@@ -1,42 +1,50 @@
-<script context="module">
+<script context="module" lang="ts">
+    import type { Load } from '@sveltejs/kit';
+
     /** @type {import('./__types/[slug]').Load} */
-    export async function load({ params, fetch, session, stuff }) {
-        const coinGroups = await fetch('/api/coins/groups');
+    export const load: Load = async function({ fetch }) {
+        const coinGroupsResponse = await fetch('/api/coins/groups');
+        const coinGroups = await coinGroupsResponse.json();
 
         return {
             props: {
-                coinGroups: (await coinGroups.json())?.data,
+                coinGroups: coinGroups.data.map((group: CoinGroupJson) => new CoinGroup(group))
             }
         };
     }
 </script>
 
 <script lang="ts">
-    import DefaultLayout from '$lib/layouts/default.svelte';
+    // JS/ TS Files
+    import CoinGroup, { type CoinGroupJson } from '$lib/models/coin-group';
+    // Components
+    import BaseLayout from '$lib/layouts/base.svelte';
     import Link from '$lib/components/inputs/link.svelte';
-    import type CoinGroup from '$lib/models/coin-group';
+    import Card from '$lib/components/card.svelte';
 
     /** The Groups of Coins. */
     export let coinGroups: CoinGroup[];
 </script>
 
-<DefaultLayout heading={"Coins"}>
-    <section>
+<BaseLayout heading={"Coins"}>
+    <section class="coin-groups">
         {#each coinGroups as coinGroup}
-            <article>
-                <img src="#" alt="{coinGroup.title} Obverse" class="obverse-img" />
-                <img src="#" alt="{coinGroup.title} Reverse" class="reverse-img" />
-                
+            <Card tag="article">
                 <Link href={`/coins/groups/${coinGroup.id?.toString()}`}>
                     { coinGroup.title }
                 </Link>
-            </article>
+
+                <div class="coin-images">
+                    <img src="{coinGroup.getObverseImagePath()}" alt="{coinGroup.title} Obverse" />
+                    <img src="{coinGroup.getReverseImagePath()}" alt="{coinGroup.title} Reverse" />
+                </div>
+            </Card>
         {/each}
     </section>
-</DefaultLayout>
+</BaseLayout>
 
 <style lang="scss">
-    section {
+    .coin-groups {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -45,10 +53,21 @@
         max-width: var(--wrap-width);
         margin: 0 auto;
     }
-    article {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
 
-        width: 20rem;
+    .coin-images {
+        display: flex;
+        gap: 0.5rem;
+
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+
+        background-color: white;
+
+        img {
+            aspect-ratio: 1/1;
+            width: 10rem;
+            max-width: 10rem;
+        }
     }
 </style>

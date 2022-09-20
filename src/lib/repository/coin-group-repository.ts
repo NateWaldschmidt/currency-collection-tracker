@@ -35,15 +35,7 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
             `SELECT * FROM ${CoinGroupRepository.COIN_GROUP_TABLE_NAME};`,
         ));
 
-        /** The mints to be returned. */
-        const groups: CoinGroup[] = [];
-
-        // Loops the different rows found with the query.
-        for (const index in rows) {
-            groups.push(this.recordToObject(rows[index]));
-        }
-
-        return groups;
+        return this.recordsToObject(rows);
     }
 
     /**
@@ -51,15 +43,15 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
      * 
      * @param record 
      */
-    public recordToObject(record: { [key: string]: string; }): CoinGroup {
-        /** The coin group object to be returned. */
-        const coinGroup = new CoinGroup();
+    public recordToObject(record: { [key: string]: string; }): CoinGroup | undefined {
+        if (!record) return;
 
-        // Sets the coin group objects.
-        coinGroup.id           = Number.parseInt(record.id);
-        coinGroup.title        = record.title;
-        coinGroup.denomination =  Number.parseInt(record.denomination) / 1000;
-
-        return coinGroup;
+        return new CoinGroup({
+            id: Number.parseInt(record.id),
+            title: record.title,
+            denomination: Number.parseFloat(record.denomination),
+            obverseImage: record.obverse_image_filename,
+            reverseImage: record.reverse_image_filename
+        });
     }
 }

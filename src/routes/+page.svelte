@@ -1,6 +1,4 @@
 <script lang="ts">
-    import BaseLayout from '$lib/layouts/base.svelte';
+    import { heading } from '$lib/stores/page-heading-store';
+    heading.set('Welcome to the CCT.');
 </script>
-
-<BaseLayout heading={"Welcome to the CCT."}>
-</BaseLayout>

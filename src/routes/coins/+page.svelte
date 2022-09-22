@@ -1,47 +1,29 @@
-<script context="module" lang="ts">
-    import type { Load } from '@sveltejs/kit';
-
-    /** @type {import('./__types/[slug]').Load} */
-    export const load: Load = async function({ fetch }) {
-        const coinGroupsResponse = await fetch('/api/coins/groups');
-        const coinGroups = await coinGroupsResponse.json();
-
-        return {
-            props: {
-                coinGroups: coinGroups.data.map((group: CoinGroupJson) => new CoinGroup(group))
-            }
-        };
-    }
-</script>
-
 <script lang="ts">
-    // JS/ TS Files
-    import CoinGroup, { type CoinGroupJson } from '$lib/models/coin-group';
-    // Components
-    import BaseLayout from '$lib/layouts/base.svelte';
     import Link from '$lib/components/inputs/link.svelte';
     import Card from '$lib/components/card.svelte';
+    import { heading } from '$lib/stores/page-heading-store';
+    import type { PageData } from './$types';
 
-    /** The Groups of Coins. */
-    export let coinGroups: CoinGroup[];
+    heading.set('Coins.')
+
+    /** The data loaded into the page. */
+    export let data: PageData;
 </script>
 
-<BaseLayout heading={"Coins"}>
-    <section class="coin-groups">
-        {#each coinGroups as coinGroup}
-            <Card tag="article">
-                <Link href={`/coins/groups/${coinGroup.id?.toString()}`}>
-                    { coinGroup.title }
-                </Link>
+<section class="coin-groups">
+    {#each data.coinGroups as coinGroup}
+        <Card tag="article">
+            <Link href={`/coins/groups/${coinGroup.id?.toString()}`}>
+                { coinGroup.title }
+            </Link>
 
-                <div class="coin-images">
-                    <img src="{coinGroup.getObverseImagePath()}" alt="{coinGroup.title} Obverse" />
-                    <img src="{coinGroup.getReverseImagePath()}" alt="{coinGroup.title} Reverse" />
-                </div>
-            </Card>
-        {/each}
-    </section>
-</BaseLayout>
+            <div class="coin-images">
+                <img src="{coinGroup.getObverseImagePath()}" alt="{coinGroup.title} Obverse" />
+                <img src="{coinGroup.getReverseImagePath()}" alt="{coinGroup.title} Reverse" />
+            </div>
+        </Card>
+    {/each}
+</section>
 
 <style lang="scss">
     .coin-groups {

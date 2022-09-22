@@ -1,9 +1,9 @@
-import createConnection from "$lib/database/connection";
 import CoinGroupRepository from "$lib/repository/coin-group-repository";
+import createConnection from "$lib/database/connection";
 import ResponseHelper from "$lib/utilities/response-helper";
+import type { RequestHandler } from './$types';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get() {
+export const GET: RequestHandler = async function() {
     /** The database connection. */
     const conn = await createConnection();
     /** The repository for interacting with the US mint database table. */
@@ -12,9 +12,8 @@ export async function get() {
     const groups = await coinGroupRepo.findAll();
     await conn.end();
 
-    return ResponseHelper.createSuccessResponse(
-        200,
+    return new Response(ResponseHelper.stringifySuccessResponse(
         'Successfully queried all coin group.',
-        JSON.parse(JSON.stringify(groups)),
-    );
+        groups,
+    ));
 }

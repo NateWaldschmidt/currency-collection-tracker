@@ -38,6 +38,21 @@ export default class ResponseHelper {
     }
 
     /**
+     * Creates a standardized success response with a message and any data if necessary.
+     * 
+     * @param message The success message to be sent.
+     * @param data    Any data associated with the request.
+     * 
+     * @returns A JSON stringified object. 
+     */
+    public static stringifySuccessResponse(message: string, data?: any): string {
+        return JSON.stringify({
+            success: message,
+            data: data,
+        });
+    }
+
+    /**
      * A helper function for generating standardized success messages.
      * 
      * @param status The HTTP status code for the response.

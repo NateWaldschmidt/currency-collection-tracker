@@ -1,25 +1,45 @@
 import createConnection from "$lib/database/connection";
 import GradeRepository from "$lib/repository/grade-repository";
 import ResponseHelper from "$lib/utilities/response-helper";
-import type { RequestEvent } from "@sveltejs/kit/types/internal";
+import type { RequestHandler } from "@sveltejs/kit/types/internal";
 
-/** @type {import('./__types/items').RequestHandler} */
-export async function get(event: RequestEvent) {
-    const gradeId = event.params.gradeId;
+/** @type {import('./$types').RequestHandler} */
+export const GET: RequestHandler = async function({params}) {
+    // Ensure the grade ID is an integer.
+    if (!Number.isInteger(+params.gradeId)) {
+        return new Response(null, {
+            'status': 400,
+            'statusText': 'The grade ID is an invalid form, must be an integer.',
+        });
+    }
 
-    const conn = await createConnection();
-    const gradeRepo = new GradeRepository(conn);
-    const grade = await gradeRepo.findById(Number.parseInt(gradeId));
-    await conn.end();
+    try {
+        /** The grade ID to be found. */
+        const gradeId = Number.parseInt(params.gradeId);
 
-    if (!grade) return ResponseHelper.createErrorResponse(
-        404,
-        `Could not find the grade with the ID of ${gradeId}.`
-    );
+        const conn = await createConnection();
+        const gradeRepo = new GradeRepository(conn);
+        const grade = await gradeRepo.findById(gradeId);
+        await conn.end();
 
-    return ResponseHelper.createSuccessResponse(
-        200,
-        `Successfully queried a grade with the ID of ${gradeId}.`,
-        grade.toJson(),
-    );
+        // Ensure the group was found.
+        if (!grade) {
+            return new Response(null, {
+                'status': 404,
+                'statusText': `Could not find the grade with the ID of ${gradeId}.`,
+            });
+        }
+
+        return new Response(ResponseHelper.stringifySuccessResponse(
+            `Successfully queried a grade with the ID of ${gradeId}.`,
+            grade,
+        ), {
+            headers: {'Content-Type': 'application/json'},
+        });
+    } catch (e) {
+        return new Response(null, {
+            'status': 500,
+            'statusText': ResponseHelper.GENERIC_SERVER_ERROR,
+        });
+    }
 }

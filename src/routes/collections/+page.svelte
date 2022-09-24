@@ -1,7 +1,9 @@
 <script lang="ts">
-    import BaseLayout from '$lib/layouts/base.svelte';
     import MaxContainer from '$lib/layouts/max-container.svelte';
     import Button from '$lib/components/inputs/button.svelte';
+    import { heading } from '$lib/stores/page-heading-store';
+
+    heading.set('Your Collections.')
 
     /**
      * Toggles the visibility of the tool tip element.
@@ -20,45 +22,43 @@
     }
 </script>
 
-<BaseLayout heading={"Your Collections"}>
-    <MaxContainer tag={'section'}>
-        <article class="collection-card">
-            <h2 class="title">Lincoln Penny Collection</h2>
-            <div class="tile-grid">
-                <div class="tile">
-                    <p class="title">Total Coins</p>
-                    <p class="data">158</p>
-                </div>
-                <div class="tile">
-                    <p class="title">Total Face</p>
-                    <div class="tooltip-container">
-                        <span class="tooltip" on:dblclick={hide} hidden>The total face value of all the coins in this collection.</span>
-                        <img
-                        src="/icons/dollar-sign.svg"
-                        alt="Dollar Sign"
-                        width="15"
-                        height="15"
-                        class="tile-icon"
-                        tabindex="0"
-                        on:focus={toggleTooltip}
-                        on:blur={toggleTooltip}
-                        />
-                    </div>
-                    <p class="data">$59.78</p>
-                </div>
-                <div class="tile">
-                    <p class="title">Progress</p>
-                    <p class="data">89.8%</p>
-                </div>
-                <div class="tile">
-                    <p class="title">Melt Value</p>
-                    <p class="data">$124.78</p>
-                </div>
+<MaxContainer tag={'section'}>
+    <article class="collection-card">
+        <h2 class="title">Lincoln Penny Collection</h2>
+        <div class="tile-grid">
+            <div class="tile">
+                <p class="title">Total Coins</p>
+                <p class="data">158</p>
             </div>
-            <Button href="/collection/id">View</Button>
-        </article>
-    </MaxContainer>
-</BaseLayout>
+            <div class="tile">
+                <p class="title">Total Face</p>
+                <div class="tooltip-container">
+                    <span class="tooltip" on:dblclick={hide} hidden>The total face value of all the coins in this collection.</span>
+                    <img
+                    src="/icons/dollar-sign.svg"
+                    alt="Dollar Sign"
+                    width="15"
+                    height="15"
+                    class="tile-icon"
+                    tabindex="0"
+                    on:focus={toggleTooltip}
+                    on:blur={toggleTooltip}
+                    />
+                </div>
+                <p class="data">$59.78</p>
+            </div>
+            <div class="tile">
+                <p class="title">Progress</p>
+                <p class="data">89.8%</p>
+            </div>
+            <div class="tile">
+                <p class="title">Melt Value</p>
+                <p class="data">$124.78</p>
+            </div>
+        </div>
+        <Button href="/collection/id">View</Button>
+    </article>
+</MaxContainer>
 
 <style lang="scss">
     .collection-card {

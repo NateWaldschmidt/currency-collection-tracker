@@ -32,14 +32,14 @@
         max-width: var(--wrap-width);
     }
 
-
     h1 {
-        margin-bottom: 0.25rem;
+        margin-bottom: 1rem;
 
         text-align: center;
     }
 
     main {
         min-height: 100vh;
+        margin-bottom: 3rem;
     }
 </style>

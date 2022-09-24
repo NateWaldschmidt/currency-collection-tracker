@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { page } from '$app/stores';
+
     /** The URL of where we are heading. */
     export let href: string;
     /** The size for the text of the link. Undefined will be regular. */
@@ -7,7 +9,7 @@
     export let weight: 'light'|'reg'|'bold'|'black' = 'reg';
 </script>
 
-<a {href} class="font-{ size } font-weight-{ weight }">
+<a {href} class="font-{ size } font-weight-{ weight } { $page.url.pathname == href ? 'active' : '' }">
     <slot></slot>
 </a>
 
@@ -37,28 +39,8 @@
         padding: 0.125rem;
         text-decoration: none;
 
-        &::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-
-            width: 0;
-            height: 0.1rem;
-            border-radius: var(--border-radius-lg);
-
-            background-color: var(--color-neutral-font);
-            opacity: 0;
-
-            transition:
-                opacity ease 200ms,
-                width ease 200ms;
-        }
-
-        &:hover::after,
-        &:focus::after {
-            opacity: 1;
-            width: 100%;
+        &:hover, &.active {
+            text-decoration: underline;
         }
     }
 </style>

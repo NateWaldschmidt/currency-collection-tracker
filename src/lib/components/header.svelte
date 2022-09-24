@@ -30,7 +30,7 @@
 <header>
     <nav>
         <div id="brand-container">
-            <Link href="/">Currency Collection Tracker</Link>
+            <Link href="/" weight={'bold'}>Currency Collection Tracker</Link>
         </div>
         <div id="center-navigation">
             <Link href="/coins">Coins</Link>
@@ -38,7 +38,7 @@
         </div>
         <div id="account-info">
             {#if !$session.user}
-                <Button href="/sign-in">Sign In</Button>
+                <Link href="/sign-in">Sign In</Link>
                 <Button href="/sign-up">Create Account</Button>
             {:else}
                 <img src="" alt={`${$session.user.displayName}'s Profile Photo`}>
@@ -50,13 +50,28 @@
 </header>
 
 <style lang="scss">
+    header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        padding: 0.75rem;
+        box-sizing: border-box;
+        border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+
+        background-color: var(--color-primary);
+        box-shadow: 0px 0px 50px -28px var(--color-primary);
+
+        z-index: 1;
+    }
+
     nav {
         display: grid;
-        grid-template-columns: 16rem auto 16rem;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
         justify-content: space-between;
 
-        width: 100%;
         max-width: var(--wrap-width);
         margin: 0 auto;
 
@@ -70,14 +85,14 @@
     #brand-container {
         @media only screen and (max-width: 600px) {
             text-align: center;
+            margin-top: 1rem;
         }
     }
 
     #account-info {
         display: flex;
-        flex-direction: column;
         justify-content: flex-end;
-        gap: 0.5rem;
+        gap: 1rem;
         max-width: 12rem;
         margin-left: auto;
 
@@ -90,5 +105,9 @@
         display: flex;
         gap: 1.5rem;
         justify-content: center;
+
+        @media only screen and (max-width: 600px) {
+            margin: 1rem 0;
+        }
     }
 </style>

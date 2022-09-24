@@ -26,6 +26,20 @@ export default class UsMintRepository extends Repository<UsMint> {
     }
 
     /**
+     * Finds the U.S. mint record utilizing it's URL key.
+     * 
+     * @param urlKey 
+     */
+    public async findByUrlKey(urlKey: string): Promise<UsMint> {
+        /** The rows with the passed in ID. */
+        const [rows] = (<mysql2.RowDataPacket[]> await this.conn.query(
+            `SELECT * FROM ${UsMintRepository.US_MINT_TABLE_NAME} WHERE url_key = ?;`,
+            [urlKey],
+        ));
+        return this.recordToObject(rows[0]);
+    }
+
+    /**
      * Finds all of the U.S. mints within the database.
      */
     public async findAll(): Promise<UsMint[]|[]> {

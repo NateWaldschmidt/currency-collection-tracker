@@ -1,20 +1,26 @@
 import createConnection from "$lib/database/connection";
 import CoinStrikeRepository from "$lib/repository/coin-strike-repository";
 import ResponseHelper from "$lib/utilities/response-helper";
+import type { RequestHandler } from "@sveltejs/kit";
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get() {
-    /** The database connection. */
-    const conn = await createConnection();
-    /** The repository for interacting with the US mint database table. */
-    const coinStrikeRepo = new CoinStrikeRepository(conn);
-    /** The strikes found in the database. */
-    const strikes = await coinStrikeRepo.findAll();
-    conn.end();
-
-    return ResponseHelper.createSuccessResponse(
-        200,
-        'Successfully queried all coin strikes.',
-        JSON.parse(JSON.stringify(strikes)),
-    );
+export const GET: RequestHandler = async function() {
+    try {
+        const conn = await createConnection();
+        const coinStrikeRepo = new CoinStrikeRepository(conn);
+        const strikes = await coinStrikeRepo.findAll();
+        conn.end();
+        
+        return new Response(ResponseHelper.stringifySuccessResponse(
+            'Successfully queried all coin strikes.',
+            strikes,
+        ), {
+            headers: {'Content-Type': 'application/json'},
+        });
+    } catch (e) {
+        return new Response(null, {
+            'status': 500,
+            'statusText': ResponseHelper.GENERIC_SERVER_ERROR,
+        });
+    }
+    
 }

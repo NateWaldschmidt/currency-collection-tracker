@@ -3,9 +3,11 @@
     export let href: string;
     /** The size for the text of the link. Undefined will be regular. */
     export let size: 'sm'|'xs'|'lg'|undefined = undefined;
+    /** The weight for the link's text. */
+    export let weight: 'light'|'reg'|'bold'|'black' = 'reg';
 </script>
 
-<a {href} class="font-{ size }">
+<a {href} class="font-{ size } font-weight-{ weight }">
     <slot></slot>
 </a>
 
@@ -19,6 +21,12 @@
     @each $size in $sizeClasses {
         .font-#{$size} {
             font-size: var(--font-size-#{$size});
+        }
+    }
+    $weightClassSuffixes: 'light', 'reg', 'bold', 'black';
+    @each $weight in $weightClassSuffixes {
+        .font-weight-#{$weight} {
+            font-weight: var(--font-weight-#{$weight});
         }
     }
 
@@ -37,6 +45,7 @@
 
             width: 0;
             height: 0.1rem;
+            border-radius: var(--border-radius-lg);
 
             background-color: var(--color-neutral-font);
             opacity: 0;

@@ -1,58 +1,42 @@
-<script context="module" lang="ts">
-    import type { Load } from "@sveltejs/kit";
-    
-    /** @type {import('./__types/[slug]').Load} */
-    export const load: Load = async function ({ params, fetch, session, stuff }) {
-        const coin = await (await fetch(`/api/coins/${params.coinId}`)).json();
-
-        return {
-            props: {
-                coin: new Coin(coin.data),
-            }
-        }
-    }
-</script>
 <script lang="ts">
-    import BaseLayout from '$lib/layouts/base.svelte';
     import MaxContainer from '$lib/layouts/max-container.svelte';
-    import Coin from '$lib/models/coin';
+    import type Coin from '$lib/models/coin';
+    import { heading } from '$lib/stores/page-heading-store';
+    import type { PageData } from './$types';
+
+    export let data: PageData;
 
     /** The coin that corresponds to the ID in the route. */
-    export let coin: Coin;
+    const coin: Coin = data.coin;
 
-    const crumbs = [
-        {link: '/coins', title: 'Coins'},
-        {link: `/coins/groups/${coin.groupId}}`, title: 'Group'},
-    ];
+    heading.set(coin.getFullTitle())
 </script>
 
-<BaseLayout heading={ coin.getFullTitle() } crumbs={ crumbs }>
-    <MaxContainer tag={"article"}>
-        <!-- Coin Images -->
-        <section id="coin-image-container">
-            <!-- Obverse Image -->
-            <img src="" alt={ `${coin.getFullTitle()} Obverse` } />
-            <!-- Reverse Image -->
-            <img src="" alt={ `${coin.getFullTitle()} Reverse` } />
-        </section>
+<MaxContainer tag={"article"}>
+    <!-- Coin Images -->
+    <section id="coin-image-container">
+        <!-- Obverse Image -->
+        <img src="" alt={ `${coin.getFullTitle()} Obverse` } />
+        <!-- Reverse Image -->
+        <img src="" alt={ `${coin.getFullTitle()} Reverse` } />
+    </section>
 
-        <!-- Coin Information Card -->
-        <section id="coin-information">
-            <article>
-                <h2>Mintage</h2>
-                <p>{ coin.getMintageString() }</p>
-            </article>
-            <article>
-                <h2>Diameter</h2>
-                <p>{ coin.getDiameterString() }</p>
-            </article>
-            <article>
-                <h2>Weight</h2>
-                <p>{ coin.getWeightString() }</p>
-            </article>
-        </section>
-    </MaxContainer>
-</BaseLayout>
+    <!-- Coin Information Card -->
+    <section id="coin-information">
+        <article>
+            <h2>Mintage</h2>
+            <p>{ coin.getMintageString() }</p>
+        </article>
+        <article>
+            <h2>Diameter</h2>
+            <p>{ coin.getDiameterString() }</p>
+        </article>
+        <article>
+            <h2>Weight</h2>
+            <p>{ coin.getWeightString() }</p>
+        </article>
+    </section>
+</MaxContainer>
 
 <style lang="scss">
     #coin-image-container {

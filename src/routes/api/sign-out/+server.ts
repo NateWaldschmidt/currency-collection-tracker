@@ -1,8 +1,9 @@
+import type { RequestHandler } from '@sveltejs/kit';
 import cookie from 'cookie';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export function put() {
-    return {
+export const PUT: RequestHandler = async function() {
+    return new Response(null, {
         headers: {
             'Set-Cookie': cookie.serialize(
                 'token',
@@ -13,7 +14,6 @@ export function put() {
                     expires: new Date(0),
                 }
             ),
-        },
-        status: 200,
-    }
+        }
+    });
 }

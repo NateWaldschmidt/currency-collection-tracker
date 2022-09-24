@@ -77,7 +77,7 @@ export default class ResponseHelper {
      * @param data    Any data to send with the response.
      * @returns A JSON response.
      */
-    public static jsonResponse(message: string, data: object|null = null, status: number = 200): Response {
+    public static jsonResponse(message: string, data: any|null = null, status: number = 200): Response {
         return new Response(JSON.stringify({
             data: data,
         }), {

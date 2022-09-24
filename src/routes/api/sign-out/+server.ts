@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import cookie from 'cookie';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
+/** Handles signing users out of their accounts. */
 export const PUT: RequestHandler = async function() {
     return new Response(null, {
         headers: {

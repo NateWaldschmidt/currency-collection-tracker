@@ -3,14 +3,17 @@ import User from "$lib/models/user";
 import UserRepository from "$lib/repository/user-repository";
 import RequestHelper from "$lib/utilities/request-helper";
 import ResponseHelper from "$lib/utilities/response-helper";
-import type { RequestEvent } from "@sveltejs/kit";
+import type { RequestEvent, RequestHandler } from "@sveltejs/kit";
 import Joi from 'joi';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function post(event: RequestEvent) {
+export const POST: RequestHandler = async function(event: RequestEvent) {
     // Checks if the user is already signed in.
     if (event.locals.user) {
-        return ResponseHelper.createErrorResponse(400, 'You are already signed in to an account.');
+        return new Response(null, {
+            'status': 400,
+            'statusText': 'You are already signed in to an account.',
+        });
     }
     
     /** The parts of the request body to search for. */
@@ -33,10 +36,10 @@ export async function post(event: RequestEvent) {
         const userRepo = new UserRepository(conn);
 
         /** A response if the account already exists in some way (email or display name). */
-        const existingAccountResponse = ResponseHelper.createErrorResponse(
-            400,
-            'This account exists already.',
-        );
+        const existingAccountResponse = new Response(null, {
+            'status': 400,
+            'statusText': 'This account exists already.',
+        });
 
         // Checks for an existing user with this email.
         if (await userRepo.findByEmail(requestBody['email'])) {
@@ -51,22 +54,19 @@ export async function post(event: RequestEvent) {
         await userRepo.create(user);
         await conn.end();
 
-        return ResponseHelper.createSuccessResponse(
+        return ResponseHelper.jsonResponse(
+            'Successfully created and signed into a user account.',
+            null,
             201,
-            'Successfully created and signed into a user account.'
         );
-
     } catch (e) {
         if (e instanceof Joi.ValidationError) {
-            return ResponseHelper.createErrorResponse(
-                400,
-                e.message,
-            );
+            return new Response(null, {
+                'status': 400,
+                'statusText': e.message,
+            });
         } else {
-            return ResponseHelper.createErrorResponse(
-                500,
-                ResponseHelper.GENERIC_SERVER_ERROR,
-            );
+            return ResponseHelper.serverErrorResponse();
         }
     }
 }

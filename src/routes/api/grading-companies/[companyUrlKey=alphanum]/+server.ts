@@ -5,26 +5,25 @@ import type { RequestHandler } from "@sveltejs/kit/types/internal";
 
 /** Finds a particular grading company by ID. */
 export const GET: RequestHandler = async function({params}) {
-    // Ensure the grade ID is an integer.
-    if (!Number.isInteger(+params.companyId)) {
-        return new Response(null, {
-            'status': 400,
-            'statusText': 'The company ID is an invalid form, must be an integer.',
-        });
-    }
-
-    /** The passed in coin group ID. */
-    const companyId = Number.parseInt(params.companyId);
+    const urlKey = params.companyUrlKey;
 
     try {
         const conn = await createConnection();
         const gradingCompanyRepo = new GradingCompanyRepository(conn);
-        const gradingCompanies = await gradingCompanyRepo.findById(companyId);
+        const gradingCompany = await gradingCompanyRepo.findByUrlKey(urlKey);
         conn.end();
 
+        // Did not find a grading company with that ID.
+        if (!gradingCompany) {
+            return new Response(null, {
+                status: 404,
+                statusText: `Could not find a grading company with the URL key of ${urlKey}.`,
+            })
+        }
+
         return ResponseHelper.jsonResponse(
-            `Successfully queried for the grading company with the ID ${companyId}.`,
-            gradingCompanies,
+            `Successfully queried for the grading company.`,
+            gradingCompany,
         );
     } catch (e) {
         return ResponseHelper.serverErrorResponse();

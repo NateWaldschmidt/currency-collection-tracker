@@ -22,6 +22,20 @@ export default class GradingCompanyRepository extends Repository<GradingCompany>
     }
 
     /**
+     * Finds a Grading Company using it's unique URL key.
+     * 
+     * @param urlKey 
+     */
+    public async findByUrlKey(urlKey: string): Promise<GradingCompany | void> {
+        // The grading company found.
+        const [rows] = (<mysql.RowDataPacket[]> await this.conn.query(
+            `SELECT * FROM ${GradingCompanyRepository.TABLE_NAME} WHERE url_key = ? LIMIT 1;`,
+            [urlKey]
+        ));
+        return this.recordToObject(rows[0]);
+    }
+
+    /**
      * Queries for all the Grading Companies within the database.
      */
     public async findAll(): Promise<GradingCompany[]> {

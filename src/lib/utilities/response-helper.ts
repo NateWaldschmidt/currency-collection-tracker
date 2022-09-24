@@ -38,13 +38,28 @@ export default class ResponseHelper {
     }
 
     /**
+     * Creates a standardized success response with a message and any data if necessary.
+     * 
+     * @param message The success message to be sent.
+     * @param data    Any data associated with the request.
+     * 
+     * @returns A JSON stringified object. 
+     */
+    public static stringifySuccessResponse(message: string, data?: any): string {
+        return JSON.stringify({
+            success: message,
+            data: data,
+        });
+    }
+
+    /**
      * A helper function for generating standardized success messages.
      * 
      * @param status The HTTP status code for the response.
      * @param message The success message for the response.
      * @returns The SuccessResponse object to be sent as the response.
      */
-     public static createSuccessResponse(status: number, message: string, data?: any): SuccessResponse {
+    public static createSuccessResponse(status: number, message: string, data?: any): SuccessResponse {
         return {
             status: status,
             body: {
@@ -52,5 +67,33 @@ export default class ResponseHelper {
                 data: data,
             },
         }
+    }
+
+    /**
+     * Creates the Response object to send JSON data in endpoints.
+     * 
+     * @param message The status text to be sent.
+     * @param status  The status to send with the response.
+     * @param data    Any data to send with the response.
+     * @returns A JSON response.
+     */
+    public static jsonResponse(message: string, data: any|null = null, status: number = 200): Response {
+        return new Response(JSON.stringify({
+            data: data,
+        }), {
+            status: status,
+            statusText: message,
+            headers: {'Content-Type': 'application/json'},
+        });
+    }
+
+    /**
+     * @returns A Response for a generic server error.
+     */
+    public static serverErrorResponse(): Response {
+        return new Response(null, {
+            'status': 500,
+            'statusText': this.GENERIC_SERVER_ERROR,
+        });
     }
 }

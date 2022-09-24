@@ -1,10 +1,12 @@
 <script lang="ts">
-    import BaseLayout from '$lib/layouts/base.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
     import Link from '$lib/components/inputs/link.svelte';
     import { notifications } from '$lib/stores/notification-store';
     import { goto } from '$app/navigation';
+    import { heading } from '$lib/stores/page-heading-store';
+
+    heading.set('Create an Account.');
 
     function handleSubmit(e: SubmitEvent) {
         /** The form being submitted. */
@@ -33,56 +35,54 @@
     }
 </script>
 
-<BaseLayout heading="Create Account">
-    <form on:submit|preventDefault={handleSubmit}>
-        <Input
-        label={"Email"}
-        hint ={"Your email will be used to sign in to your account."}
-        type ={"email"}
-        id   ={"email"}
-        name ={"email"}
-        required
-        />
+<form on:submit|preventDefault={handleSubmit}>
+    <Input
+    label={"Email"}
+    hint ={"Your email will be used to sign in to your account."}
+    type ={"email"}
+    id   ={"email"}
+    name ={"email"}
+    required
+    />
 
-        <Input
-        label={"Password"}
-        type ={"password"}
-        id   ={"password"}
-        name ={"password"}
-        required
-        />
+    <Input
+    label={"Password"}
+    type ={"password"}
+    id   ={"password"}
+    name ={"password"}
+    required
+    />
 
+    <Input
+    label={"Display Name"}
+    hint ={"Your display name will be public for other user's to identify you."}
+    type ={"text"}
+    id   ={"display-name"}
+    name ={"display-name"}
+    required
+    />
+
+    <div id="name-container">
         <Input
-        label={"Display Name"}
-        hint ={"Your display name will be public for other user's to identify you."}
+        label={"First Name"}
         type ={"text"}
-        id   ={"display-name"}
-        name ={"display-name"}
-        required
+        id   ={"first-name"}
+        name ={"first-name"}
         />
 
-        <div id="name-container">
-            <Input
-            label={"First Name"}
-            type ={"text"}
-            id   ={"first-name"}
-            name ={"first-name"}
-            />
+        <Input
+        label={"Last Name"}
+        type ={"text"}
+        id   ={"last-name"}
+        name ={"last-name"}
+        />
+    </div>
 
-            <Input
-            label={"Last Name"}
-            type ={"text"}
-            id   ={"last-name"}
-            name ={"last-name"}
-            />
-        </div>
-
-        <div id="submit-container">
-            <Button type={"submit"}>Sign In</Button>
-            <Link href={"/sign-in"} size={'xs'}>Already have an account? Sign in.</Link>
-        </div>
-    </form>
-</BaseLayout>
+    <div id="submit-container">
+        <Button type={"submit"}>Sign In</Button>
+        <Link href={"/sign-in"} size={'xs'}>Already have an account? Sign in.</Link>
+    </div>
+</form>
 
 <style lang="scss">
     form {

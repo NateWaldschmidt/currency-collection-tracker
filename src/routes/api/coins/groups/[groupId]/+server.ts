@@ -6,25 +6,30 @@ import BaseModel from "$lib/models/base-model";
 import type { RequestHandler } from "@sveltejs/kit";
 
 /** Handles the request for a group ID and it's corresponding coins. */
-export const get: RequestHandler = async function({ params }) {
+export const GET: RequestHandler = async function({ params }) {
     // Ensure the group ID is an integer.
     if (!Number.isInteger(+params.groupId)) {
-        return ResponseHelper.createErrorResponse(400, 'The coin group ID is an invalid form, must be an integer.');
+        return new Response(null, {
+            'status': 400,
+            'statusText': 'The coin group ID is an invalid form, must be an integer.',
+        });
     }
 
     /** The passed in coin group ID. */
     const coinGroupId = Number.parseInt(params.groupId);
 
     const conn = await createConnection();
-
     // Queries for the group with the passed in ID.
     const coinGroupRepo = new CoinGroupRepository(conn);
     const group = await coinGroupRepo.findById(coinGroupId);
 
-    if (!group) return ResponseHelper.createErrorResponse(
-        404,
-        `Could not find a coin group with ID ${coinGroupId}.`
-    );
+    // Ensure the group was found.
+    if (!group) {
+        return new Response(null, {
+            'status': 404,
+            'statusText': `Could not find a coin group with ID ${coinGroupId}.`,
+        });
+    }
 
     // Queries for the groups coins.
     const coinRepo = new CoinRepository(conn);
@@ -32,12 +37,13 @@ export const get: RequestHandler = async function({ params }) {
 
     await conn.end();
 
-    return ResponseHelper.createSuccessResponse(
-        200,
+    return new Response(ResponseHelper.stringifySuccessResponse(
         `Successfully queried for the coin group with ID ${coinGroupId}.`,
         {
             coinGroup: group.toJson(),
             coins: BaseModel.toJsonArray(coins),
         },
-    );
+    ), {
+        headers: {'Content-Type': 'application/json'},
+    });
 }

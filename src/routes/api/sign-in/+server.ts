@@ -2,18 +2,18 @@ import createConnection from "$lib/database/connection";
 import UserRepository from "$lib/repository/user-repository";
 import Auth, { type TokenPayload } from "$lib/utilities/auth";
 import ResponseHelper from "$lib/utilities/response-helper";
-import type { RequestEvent } from "@sveltejs/kit";
+import type { RequestEvent, RequestHandler } from "@sveltejs/kit";
 import * as bcrypt from 'bcrypt';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function post(event: RequestEvent) {
+export const POST: RequestHandler = async function(event: RequestEvent) {
     // Checks if the user is already signed in.
     if (event.locals.user) {
-        return ResponseHelper.createErrorResponse(400, 'You are already signed in to an account.');
+        return new Response(null, {
+            'status': 400,
+            'statusText': 'You are already signed in to an account.',
+        });
     }
 
-    /** A generic error response for when something fails. */
-    const ambiguousErrorMessage = 'The email or password you entered is incorrect.';
     /** The FormData received in the request. */
     const formData = await event.request.formData();
     /** The parts of the request body to search for. */
@@ -24,23 +24,36 @@ export async function post(event: RequestEvent) {
 
     // Missing a required field in the request body.
     if (!requestBody.email || !requestBody.password) {
-        return ResponseHelper.createErrorResponse(400, 'Missing a required field to authenticate.');
+        return new Response(null, {
+            'status': 400,
+            'statusText': 'Missing a required field to authenticate sign in.',
+        });
     }
 
     try {
-        /** The database connection. */
         const conn = await createConnection();
-        /** Allows working with the user related tables. */
         const userRepo = new UserRepository(conn);
-        /** The user found in the database. */
+        /** The user found with the email. */
         const user = await userRepo.findByEmail(requestBody.email);
 
+        /** A generic error response for when something fails. */
+        const ambiguousErrorMessage = 'The email or password you entered is incorrect.';
+
         // Did not find a user.
-        // This error message displays on purpose as to not give away more information than necessary.
-        if (!user) return ResponseHelper.createErrorResponse(400, ambiguousErrorMessage);
+        if (!user) {
+            conn.end();
+            return new Response(null, {
+                'status': 400,
+                'statusText': ambiguousErrorMessage,
+            });
+        }
         // Validates the user has all necessary components for generating a token.
         if (!user.id || !user.email || !user.hashedPassword || !user.displayName) {
-            return ResponseHelper.createErrorResponse(500, 'There is a problem with this account, please contact an admin.');
+            conn.end();
+            return new Response(null, {
+                'status': 500,
+                'statusText': 'There is a problem with this account, please contact an admin.',
+            });
         }
 
         // Validate the user.
@@ -61,15 +74,19 @@ export async function post(event: RequestEvent) {
             }
 
             conn.end();
-            return {
-                headers: { 'Set-Cookie': Auth.createTokenCookie(tokenPayload, (currentDate + (tokenValidationTime * 60 * 1000))) },
-                status: 200,
-            }
+            return new Response(null, {
+                headers: {
+                    'Set-Cookie': Auth.createTokenCookie(tokenPayload, (currentDate + (tokenValidationTime * 60 * 1000))),
+                }
+            });
         } else {
             conn.end();
-            return ResponseHelper.createErrorResponse(400, ambiguousErrorMessage);
+            return new Response(null, {
+                'status': 400,
+                'statusText': ambiguousErrorMessage,
+            });
         }
-    } catch (err) {
-        return ResponseHelper.createErrorResponse(500, ResponseHelper.GENERIC_SERVER_ERROR);
+    } catch (e) {
+        return ResponseHelper.serverErrorResponse();
     }
 }

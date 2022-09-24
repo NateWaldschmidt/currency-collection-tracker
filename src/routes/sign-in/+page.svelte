@@ -1,11 +1,12 @@
 <script lang="ts">
-    import BaseLayout from '$lib/layouts/base.svelte';
-    import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
+    import Input from '$lib/components/inputs/input.svelte';
     import Link from '$lib/components/inputs/link.svelte';
-    import { notifications } from '$lib/stores/notification-store';
     import { goto } from '$app/navigation';
-
+    import { heading } from '$lib/stores/page-heading-store';
+    import { notifications } from '$lib/stores/notification-store';
+    
+    heading.set('Sign In.');
     /**
      * Handles submitting the form to log the user in.
      */
@@ -40,30 +41,28 @@
     }
 </script>
 
-<BaseLayout heading="Sign In">
-    <form on:submit|preventDefault={handleSubmit}>
-        <Input
-        label={"Email"}
-        type ={"email"}
-        id   ={"email"}
-        name ={"email"}
-        required
-        />
+<form on:submit|preventDefault={handleSubmit}>
+    <Input
+    label={"Email"}
+    type ={"email"}
+    id   ={"email"}
+    name ={"email"}
+    required
+    />
 
-        <Input
-        label={"Password"}
-        type ={"password"}
-        id   ={"password"}
-        name ={"password"}
-        required
-        />
+    <Input
+    label={"Password"}
+    type ={"password"}
+    id   ={"password"}
+    name ={"password"}
+    required
+    />
 
-        <div id="submit-container">
-            <Button type={"submit"}>Sign In</Button>
-            <Link href={"/sign-up"} size={'xs'}>Need an Account? Create one.</Link>
-        </div>
-    </form>
-</BaseLayout>
+    <div id="submit-container">
+        <Button type={"submit"}>Sign In</Button>
+        <Link href={"/sign-up"} size={'xs'}>Need an Account? Create one.</Link>
+    </div>
+</form>
 
 <style lang="scss">
     form {

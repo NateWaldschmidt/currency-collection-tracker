@@ -1,17 +1,19 @@
 import createConnection from "$lib/database/connection";
 import CoinCompositionRepository from "$lib/repository/coin-composition-repository";
 import ResponseHelper from "$lib/utilities/response-helper";
+import type { RequestHandler } from "@sveltejs/kit";
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get() {
+/** Handles querying for all coin compositions. */
+export const GET: RequestHandler = async function() {
     const conn = await createConnection();
     const coinCompRepo = new CoinCompositionRepository(conn);
     const groups = await coinCompRepo.findAll();
     await conn.end();
 
-    return ResponseHelper.createSuccessResponse(
-        200,
+    return new Response(ResponseHelper.stringifySuccessResponse(
         'Successfully queried all coin compositions.',
-        JSON.parse(JSON.stringify(groups)),
-    );
+        groups,
+    ), {
+        headers: {'Content-Type': 'application/json'},
+    });
 }

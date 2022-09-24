@@ -59,7 +59,7 @@ export default class ResponseHelper {
      * @param message The success message for the response.
      * @returns The SuccessResponse object to be sent as the response.
      */
-     public static createSuccessResponse(status: number, message: string, data?: any): SuccessResponse {
+    public static createSuccessResponse(status: number, message: string, data?: any): SuccessResponse {
         return {
             status: status,
             body: {
@@ -67,5 +67,33 @@ export default class ResponseHelper {
                 data: data,
             },
         }
+    }
+
+    /**
+     * Creates the Response object to send JSON data in endpoints.
+     * 
+     * @param message The status text to be sent.
+     * @param status  The status to send with the response.
+     * @param data    Any data to send with the response.
+     * @returns A JSON response.
+     */
+    public static jsonResponse(message: string, data: object|null = null, status: number = 200): Response {
+        return new Response(JSON.stringify({
+            data: data,
+        }), {
+            status: status,
+            statusText: message,
+            headers: {'Content-Type': 'application/json'},
+        });
+    }
+
+    /**
+     * @returns A Response for a generic server error.
+     */
+    public static serverErrorResponse(): Response {
+        return new Response(null, {
+            'status': 500,
+            'statusText': this.GENERIC_SERVER_ERROR,
+        });
     }
 }

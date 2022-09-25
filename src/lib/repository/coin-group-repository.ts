@@ -4,7 +4,7 @@ import Repository from "$lib/repository/repository";
 
 export default class CoinGroupRepository extends Repository<CoinGroup> {
     /** The table name for the U.S. mint database table. */
-    private static readonly COIN_GROUP_TABLE_NAME = 'cct_coin_groups';
+    static readonly TABLE_NAME = 'cct_coin_groups';
 
     /**
      * Finds a particular Coin Group by ID.
@@ -14,16 +14,25 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
     public async findById(id: number): Promise<void|CoinGroup> {
         /** The rows with the passed in ID. */
         const [rows] = (<mysql2.RowDataPacket[]> await this.conn.query(
-            `SELECT * FROM ${CoinGroupRepository.COIN_GROUP_TABLE_NAME} WHERE id = ?;`,
+            `SELECT * FROM ${CoinGroupRepository.TABLE_NAME} WHERE id = ?;`,
             [id],
         ));
+        return this.recordToObject(rows[0]);
+    }
 
-        /** The Coin Group found with the ID passed in. */
-        const group = rows[0];
-
-        if (!group) return;
-
-        return this.recordToObject(group);
+    /**
+     * Finds a particular Coin Group using their unique URL key.
+     * 
+     * @param urlKey 
+     * @returns 
+     */
+    public async findByUrlKey(urlKey: string): Promise<CoinGroup|undefined> {
+        /** The rows with the passed in URL key. */
+        const [rows] = (<mysql2.RowDataPacket[]> await this.conn.query(
+            `SELECT * FROM ${CoinGroupRepository.TABLE_NAME} WHERE url_key = ?;`,
+            [urlKey],
+        ));
+        return this.recordToObject(rows[0]);
     }
 
     /**
@@ -32,7 +41,7 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
     public async findAll(): Promise<CoinGroup[]> {
         /** All of the rows found. */
         const [rows] = (<mysql2.RowDataPacket[]> await this.conn.query(
-            `SELECT * FROM ${CoinGroupRepository.COIN_GROUP_TABLE_NAME};`,
+            `SELECT * FROM ${CoinGroupRepository.TABLE_NAME};`,
         ));
 
         return this.recordsToObject(rows);
@@ -48,6 +57,7 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
 
         return new CoinGroup({
             id: Number.parseInt(record.id),
+            urlKey: record.url_key,
             title: record.title,
             denomination: Number.parseFloat(record.denomination),
             obverseImage: record.obverse_image_filename,

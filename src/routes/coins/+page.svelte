@@ -4,7 +4,7 @@
     import { heading } from '$lib/stores/page-heading-store';
     import type { PageData } from './$types';
 
-    heading.set('Coins.')
+    heading.set('Coins')
 
     /** The data loaded into the page. */
     export let data: PageData;
@@ -13,7 +13,7 @@
 <section class="coin-groups">
     {#each data.coinGroups as coinGroup}
         <Card tag="article">
-            <Link href={`/coins/groups/${coinGroup.id?.toString()}`}>
+            <Link href={`/coins/${coinGroup.urlKey}`}>
                 { coinGroup.title }
             </Link>
 

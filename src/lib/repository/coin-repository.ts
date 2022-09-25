@@ -1,11 +1,12 @@
 import type mysql from 'mysql2';
-import Coin, { type CoinJson } from "$lib/models/coin";
-import Repository from "$lib/repository/repository";
-import CoinStrikeRepository from './coin-strike-repository';
-import UsMintRepository from './us-mint-repository';
-import CoinCompositionRepository from './coin-composition-repository';
-import CoinVarietyRepository from './coin-variety-repository';
+import Coin from '$lib/models/coin';
+import Repository from '$lib/repository/repository';
+import CoinStrikeRepository from '$lib/repository/coin-strike-repository';
+import UsMintRepository from '$lib/repository/us-mint-repository';
+import CoinCompositionRepository from '$lib/repository/coin-composition-repository';
+import CoinVarietyRepository from '$lib/repository/coin-variety-repository';
 import CoinVariety, { type CoinVarietyJson } from '$lib/models/coin-variety';
+import CoinGroupRepository from '$lib/repository/coin-group-repository';
 
 /** The repository for managing coins. */
 export default class CoinRepository extends Repository<Coin> {

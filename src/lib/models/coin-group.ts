@@ -5,6 +5,7 @@ import mediaConfig from '$lib/media-config';
 /** The structure for creating a CoinGroup model. */
 export interface CoinGroupJson {
     id?: number,
+    urlKey?: string,
     title?: string,
     obverseImage?: string,
     reverseImage?: string,
@@ -14,6 +15,8 @@ export interface CoinGroupJson {
 /** The Coin Groups. */
 export default class CoinGroup extends BaseModel<CoinGroup> {
     id: number;
+    /** The unique identifier to be used in URLs. */
+    urlKey: string | null;
     /** The title of this particular coin group. */
     title: string;
     /** The filename for an image of the obverse for this coin. */
@@ -32,31 +35,26 @@ export default class CoinGroup extends BaseModel<CoinGroup> {
         }
 
         this.id = groupJson.id;
+        this.urlKey = groupJson.urlKey || null;
         this.title = groupJson.title;
         this.obverseImage = groupJson.obverseImage || null;
         this.reverseImage = groupJson.reverseImage || null;
         this.denomination = groupJson.denomination || null;
     }
     
-    /**
-     * @returns The path for this coin group's obverse image.
-     */
+    /** @returns The path for this coin group's obverse image. */
     public getObverseImagePath(): string|undefined {
         if (!this.obverseImage) return this.getDefaultImagePath();
         return `${mediaConfig.coinGroupImagePath}/${this.obverseImage}`
     }
 
-    /**
-     * @returns The path for this coin group's reverse image.
-     */
+    /** @returns The path for this coin group's reverse image. */
     public getReverseImagePath(): string|undefined {
         if (!this.reverseImage) return this.getDefaultImagePath();
         return `${mediaConfig.coinGroupImagePath}/${this.reverseImage}`
     }
 
-    /**
-     * @returns The default coin group image's path.
-     */
+    /** @returns The default coin group image's path. */
     public getDefaultImagePath(): string {
         return `${mediaConfig.coinGroupImagePath}/default.svg`;
     }
@@ -65,6 +63,7 @@ export default class CoinGroup extends BaseModel<CoinGroup> {
     public getSchema(): Joi.ObjectSchema<any> {
         return Joi.object({
             id: Joi.number().integer().min(1).required(),
+            urlKey: Joi.string().pattern(/^[a-zA-Z][a-zA-Z0-9\-]*$/).allow(null),
             title: Joi.string().required(),
             obverseImage: Joi.string().allow(null),
             reverseImage: Joi.string().allow(null),

@@ -43,14 +43,6 @@ data-col-index="{columnIndex}">
             font-weight: inherit;
         }
     }
-    .direction-icon {
-        & > .asc, & > .desc {
-            color: green;
-        }
-        & > :not(.asc), & > :not(.desc) {
-            color: red;
-        }
-    }
     .align-left {
         &, & > button {
             text-align: left;

@@ -9,6 +9,7 @@ import Joi from "joi";
 /** The JSON used to construct a coin. */
 export interface CoinJson {
     id?: number,
+    urlKey?: string,
     groupId?: number,
     group?: CoinGroup,
     year?: number,
@@ -30,6 +31,8 @@ export interface CoinJson {
 export default class Coin extends BaseModel<Coin> {
     /** The ID of the coin within the database. */
     public id: number;
+    /** The unique identifier for the coin in a url. */
+    public urlKey: string;
     /** The ID of the group the coin belongs to. */
     public groupId: number;
     /** The year that appears on this coin. Generally the year the coin was minted. */
@@ -64,6 +67,7 @@ export default class Coin extends BaseModel<Coin> {
 
         // Checks for required fields
         if (coinJson.id               === undefined
+            || coinJson.urlKey        === undefined
             || coinJson.groupId       === undefined
             || coinJson.year          === undefined
             || coinJson.mintId        === undefined
@@ -77,6 +81,7 @@ export default class Coin extends BaseModel<Coin> {
 
         // Sets all fields.
         this.id              = coinJson.id;
+        this.urlKey          = coinJson.urlKey;
         this.groupId         = coinJson.groupId;
         this.year            = coinJson.year;
         this.mintMarkId      = coinJson.mintMarkId || null;

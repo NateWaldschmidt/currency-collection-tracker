@@ -7,7 +7,7 @@ import type { RequestHandler } from "@sveltejs/kit";
 /** Finds all the coins for a particular group. */
 export const GET: RequestHandler = async function({ params }) {
     /** The URL key for this particular group. */
-    const groupUrlKey = params.urlKey;
+    const groupUrlKey = params.groupUrlKey;
 
     try {
         const conn = await createConnection();
@@ -31,6 +31,8 @@ export const GET: RequestHandler = async function({ params }) {
             coins,
         );
     } catch (e) {
+        // TODO Add logger here.
+        console.error(e);
         return ResponseHelper.serverErrorResponse();
     }
 }

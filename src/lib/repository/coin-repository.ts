@@ -6,7 +6,6 @@ import UsMintRepository from '$lib/repository/us-mint-repository';
 import CoinCompositionRepository from '$lib/repository/coin-composition-repository';
 import CoinVarietyRepository from '$lib/repository/coin-variety-repository';
 import CoinVariety, { type CoinVarietyJson } from '$lib/models/coin-variety';
-import CoinGroupRepository from '$lib/repository/coin-group-repository';
 
 /** The repository for managing coins. */
 export default class CoinRepository extends Repository<Coin> {
@@ -50,6 +49,27 @@ export default class CoinRepository extends Repository<Coin> {
         const [rows] = (<mysql.RowDataPacket[]> await this.conn.query(
             `${this.baseQuery} WHERE coin.id = ? GROUP BY coin.id LIMIT 1;`,
             [id]
+        ));
+        /** The coin record found when querying the database. */
+        const coinRecord = rows[0];
+
+        // Did not find the coin record in the database.
+        if (!coinRecord) return;
+
+        return this.recordToObject(coinRecord);
+    }
+
+    /**
+     * Queries for a particular coin with it's URL key and group ID.
+     * 
+     * @param urlKey 
+     * @returns 
+     */
+    public async findByUrlKey(urlKey: string, groupId: number) : Promise<Coin|void> {
+        /** All the coins found with this ID. */
+        const [rows] = (<mysql.RowDataPacket[]> await this.conn.query(
+            `${this.baseQuery} WHERE coin.url_key = ? AND coin.group_id = ? GROUP BY coin.id LIMIT 1;`,
+            [urlKey, groupId]
         ));
         /** The coin record found when querying the database. */
         const coinRecord = rows[0];
@@ -209,6 +229,7 @@ export default class CoinRepository extends Repository<Coin> {
         /** The coin that is to be created. */
         return new Coin({
             id:              Number.parseInt(coinRecord.id),
+            urlKey:          coinRecord.url_key,
             groupId:         Number.parseInt(coinRecord.group_id),
             year:            Number.parseInt(coinRecord.year),
             mintMarkId:      Number.parseInt(coinRecord.mint_mark_id),

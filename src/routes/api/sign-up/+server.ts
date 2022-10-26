@@ -1,8 +1,8 @@
-import createConnection from "$lib/database/connection";
+import createConnection from "$lib/server/database/connection";
 import User from "$lib/models/user";
-import UserRepository from "$lib/repository/user-repository";
-import RequestHelper from "$lib/utilities/request-helper";
-import ResponseHelper from "$lib/utilities/response-helper";
+import UserRepository from "$lib/server/repository/user-repository";
+import RequestHelper from "$lib/server/utilities/request-helper";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestEvent, RequestHandler } from "@sveltejs/kit";
 import Joi from 'joi';
 

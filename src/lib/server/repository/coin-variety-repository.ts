@@ -1,5 +1,5 @@
 import CoinVariety from "$lib/models/coin-variety";
-import Repository from "$lib/repository/repository";
+import Repository from "$lib/server/repository/repository";
 import type mysql2 from 'mysql2';
 
 export default class CoinVarietyRepository extends Repository<CoinVariety> {

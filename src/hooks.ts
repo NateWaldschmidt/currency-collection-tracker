@@ -1,4 +1,4 @@
-import type { TokenPayload } from '$lib/utilities/auth';
+import type { TokenPayload } from '$lib/server/utilities/auth';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';

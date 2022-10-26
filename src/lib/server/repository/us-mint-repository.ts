@@ -1,5 +1,5 @@
 import type mysql2 from 'mysql2';
-import Repository from "$lib/repository/repository";
+import Repository from "$lib/server/repository/repository";
 import UsMint from '$lib/models/us-mint';
 
 export default class UsMintRepository extends Repository<UsMint> {

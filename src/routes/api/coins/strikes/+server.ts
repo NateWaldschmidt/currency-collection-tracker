@@ -1,6 +1,6 @@
-import createConnection from "$lib/database/connection";
-import CoinStrikeRepository from "$lib/repository/coin-strike-repository";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import CoinStrikeRepository from "$lib/server/repository/coin-strike-repository";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async function() {

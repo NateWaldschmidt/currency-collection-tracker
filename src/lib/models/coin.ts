@@ -11,20 +11,15 @@ export interface CoinJson {
     id?: number,
     urlKey?: string,
     groupId?: number,
-    group?: CoinGroup,
     year?: number,
     mintMarkId?: number | null,
     mintId?: number,
-    mint?: UsMint,
     additionalTitle?: string | null,
     strikeId?: number,
-    strike?: CoinStrike,
     compositionId?: number,
-    composition?: CoinComposition,
     mintage?: number | null,
     diameter?: number | null,
     varietyIds?: number[],
-    varieties?: CoinVariety[],
 }
 
 /** The model for Coins. */
@@ -41,18 +36,12 @@ export default class Coin extends BaseModel<Coin> {
     public mintMarkId: number | null;
     /** The ID of the mint that minted the coin. */
     public mintId: number;
-    /** The Mint that produced the coin. */
-    public mint: UsMint;
     /** The additional description of the coin. */
     public additionalTitle: string | null;
     /** The ID of the strike. */
     public strikeId: number;
-    /** The type of strike for this coin. */
-    public strike: CoinStrike;
     /** The ID of the composition for the coin. */
     public compositionId: number;
-    /** The composition of the coin. */
-    public composition: CoinComposition;
     /** The number of coins that were minted. */
     public mintage: number | null;
     /** The diameter of the coin. */
@@ -60,7 +49,6 @@ export default class Coin extends BaseModel<Coin> {
     /** The IDs of all varieties for this coin. */
     public varietyIds: number[];
     /** The array of strings for the coin's varieties. */
-    public varieties: CoinVariety[];
 
     public constructor(coinJson: CoinJson) {
         super();
@@ -71,11 +59,8 @@ export default class Coin extends BaseModel<Coin> {
             || coinJson.groupId       === undefined
             || coinJson.year          === undefined
             || coinJson.mintId        === undefined
-            || coinJson.mint          === undefined
             || coinJson.strikeId      === undefined
-            || coinJson.strike        === undefined
-            || coinJson.compositionId === undefined
-            || coinJson.composition   === undefined) {
+            || coinJson.compositionId === undefined) {
             throw new ReferenceError(`Missing required field.`);
         }
 
@@ -86,16 +71,12 @@ export default class Coin extends BaseModel<Coin> {
         this.year            = coinJson.year;
         this.mintMarkId      = coinJson.mintMarkId || null;
         this.mintId          = coinJson.mintId;
-        this.mint            = coinJson.mint;
         this.additionalTitle = coinJson.additionalTitle || null;
         this.strikeId        = coinJson.strikeId;
-        this.strike          = coinJson.strike;
         this.compositionId   = coinJson.compositionId;
-        this.composition     = coinJson.composition;
         this.mintage         = coinJson.mintage || null;
         this.diameter        = coinJson.diameter || null;
         this.varietyIds      = coinJson.varietyIds || [];
-        this.varieties       = coinJson.varieties || [];
     }
 
     /**
@@ -105,25 +86,14 @@ export default class Coin extends BaseModel<Coin> {
         if (this.year) {
             let title = this.year?.toString();
 
-            if (this.mintMarkId) title = `${title}-${this.mint?.mark}`;
             if (this.additionalTitle) title = `${title} ${this.additionalTitle}`;
-            if (this.varieties) title = `${title} ${this.varieties.map((variety) => variety.title).join(' ')}`;
     
             return title;
         }
         return '';
     }
 
-    /**
-     * @returns a formatted string with a unit of the weight.
-     */
-    public getWeightString(): string {
-        return `${this.composition?.weight}g` || '-';
-    }
-
-    /**
-     * {@link Coin.getMintageString() getMintageString()}
-     */
+    /** See the static {@link Coin.getMintageString() getMintageString()}. */
     public getMintageString(): string {
         return Coin.getMintageString(this.mintage);
     }

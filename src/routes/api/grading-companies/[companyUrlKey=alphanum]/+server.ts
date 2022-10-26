@@ -1,6 +1,6 @@
-import createConnection from "$lib/database/connection";
-import GradingCompanyRepository from "$lib/repository/grading-company-repository";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import GradingCompanyRepository from "$lib/server/repository/grading-company-repository";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit/types/internal";
 
 /** Finds a particular grading company by ID. */

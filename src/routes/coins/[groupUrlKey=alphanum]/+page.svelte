@@ -37,7 +37,7 @@
             headerCell: { label: 'Weight' },
             dataCell: { dataKey: 'composition.weight' },
             alignment: 'right',
-            render: (_: any, coin: Coin) => coin.getWeightString(),
+            render: (_: any, coin: Coin) => '0', //TODO Implement
         },
     ];
 </script>

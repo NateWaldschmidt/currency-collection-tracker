@@ -1,7 +1,7 @@
 import type mysql2 from 'mysql2';
-import Auth        from '$lib/utilities/auth';
+import Auth        from '$lib/server/utilities/auth';
 import User        from "$lib/models/user"
-import Repository  from "$lib/repository/repository";
+import Repository  from "$lib/server/repository/repository";
 
 export default class UserRepository extends Repository<User> {
     /** The user's table name. */

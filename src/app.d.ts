@@ -1,5 +1,5 @@
 /// <reference types="@sveltejs/kit" />
-import { type TokenPayload}  from '$lib/utilities/auth';
+import { type TokenPayload}  from '$lib/server/utilities/auth';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces

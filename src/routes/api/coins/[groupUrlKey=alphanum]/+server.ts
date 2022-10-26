@@ -1,6 +1,6 @@
-import CoinGroupRepository from "$lib/repository/coin-group-repository";
-import createConnection from "$lib/database/connection";
-import ResponseHelper from "$lib/utilities/response-helper";
+import CoinGroupRepository from "$lib/server/repository/coin-group-repository";
+import createConnection from "$lib/server/database/connection";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async function({ params }) {

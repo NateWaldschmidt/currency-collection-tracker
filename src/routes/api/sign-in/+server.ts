@@ -1,7 +1,7 @@
-import createConnection from "$lib/database/connection";
-import UserRepository from "$lib/repository/user-repository";
-import Auth, { type TokenPayload } from "$lib/utilities/auth";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import UserRepository from "$lib/server/repository/user-repository";
+import Auth, { type TokenPayload } from "$lib/server/utilities/auth";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestEvent, RequestHandler } from "@sveltejs/kit";
 import * as bcrypt from 'bcrypt';
 

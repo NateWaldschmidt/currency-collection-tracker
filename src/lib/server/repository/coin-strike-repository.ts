@@ -1,6 +1,6 @@
 import type mysql2 from 'mysql2';
 import CoinStrike from "$lib/models/coin-strike";
-import Repository from "$lib/repository/repository";
+import Repository from "$lib/server/repository/repository";
 
 export default class CoinStrikeRepository extends Repository<CoinStrike> {
     /** The database table name for coin strikes. */

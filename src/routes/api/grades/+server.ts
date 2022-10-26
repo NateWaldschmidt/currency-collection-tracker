@@ -1,6 +1,6 @@
-import createConnection from "$lib/database/connection";
-import GradeRepository from "$lib/repository/grade-repository";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import GradeRepository from "$lib/server/repository/grade-repository";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit/types/internal";
 
 /** Finds all grades. */

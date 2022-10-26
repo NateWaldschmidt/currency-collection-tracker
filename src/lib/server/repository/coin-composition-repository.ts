@@ -1,5 +1,5 @@
 import type mysql2 from 'mysql2';
-import Repository from "$lib/repository/repository";
+import Repository from "$lib/server/repository/repository";
 import CoinComposition from '$lib/models/coin-compositions';
 
 export default class CoinCompositionRepository extends Repository<CoinComposition> {

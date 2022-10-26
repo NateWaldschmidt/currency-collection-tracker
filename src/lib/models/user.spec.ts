@@ -1,6 +1,6 @@
 import User from './user';
 import * as bcrypt from 'bcrypt';
-import Auth from '$lib/utilities/auth';
+import Auth from '$lib/server/utilities/auth';
 import Joi from 'joi';
 
 test('user password hashing', async () => {

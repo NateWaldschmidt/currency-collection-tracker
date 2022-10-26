@@ -1,7 +1,7 @@
-import createConnection from "$lib/database/connection";
-import CoinGroupRepository from "$lib/repository/coin-group-repository";
-import CoinRepository from "$lib/repository/coin-repository";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import CoinGroupRepository from "$lib/server/repository/coin-group-repository";
+import CoinRepository from "$lib/server/repository/coin-repository";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit";
 
 /** Finds all the coins for a particular group. */

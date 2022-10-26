@@ -1,6 +1,6 @@
 import type mysql2 from 'mysql2';
 import CoinGroup from "$lib/models/coin-group";
-import Repository from "$lib/repository/repository";
+import Repository from "$lib/server/repository/repository";
 
 export default class CoinGroupRepository extends Repository<CoinGroup> {
     /** The table name for the U.S. mint database table. */

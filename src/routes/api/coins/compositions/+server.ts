@@ -1,6 +1,6 @@
-import createConnection from "$lib/database/connection";
-import CoinCompositionRepository from "$lib/repository/coin-composition-repository";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import CoinCompositionRepository from "$lib/server/repository/coin-composition-repository";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit";
 
 /** Handles querying for all coin compositions. */

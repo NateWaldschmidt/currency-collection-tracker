@@ -1,6 +1,6 @@
-import createConnection from "$lib/database/connection";
-import UsMintRepository from "$lib/repository/us-mint-repository";
-import ResponseHelper from "$lib/utilities/response-helper";
+import createConnection from "$lib/server/database/connection";
+import UsMintRepository from "$lib/server/repository/us-mint-repository";
+import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').RequestHandler} */

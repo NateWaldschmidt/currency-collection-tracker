@@ -1,43 +1,11 @@
 import type mysql from 'mysql2';
 import Coin from '$lib/models/coin';
-import Repository from '$lib/repository/repository';
-import CoinStrikeRepository from '$lib/repository/coin-strike-repository';
-import UsMintRepository from '$lib/repository/us-mint-repository';
-import CoinCompositionRepository from '$lib/repository/coin-composition-repository';
-import CoinVarietyRepository from '$lib/repository/coin-variety-repository';
-import CoinVariety, { type CoinVarietyJson } from '$lib/models/coin-variety';
+import Repository from '$lib/server/repository/repository';
 
 /** The repository for managing coins. */
 export default class CoinRepository extends Repository<Coin> {
     /** The coin's table name. */
     public static readonly TABLE_NAME = 'cct_coins';
-    /** The base query for a coin's information. */
-    private baseQuery = `SELECT
-        coin.*,
-        strike.title AS strike_title,
-        strike.abbreviation AS strike_abbreviation,
-        mint.mark AS mint_mark,
-        mint.city AS mint_city,
-        mint.state AS mint_state,
-        mint.date_opened AS mint_date_opened,
-        mint.date_closed AS mint_date_closed,
-        composition.title AS composition_title,
-        composition.weight AS composition_weight,
-        composition.description AS composition_description,
-        GROUP_CONCAT(variety.id) AS variety_ids,
-        GROUP_CONCAT(variety.title) AS variety_titles,
-        GROUP_CONCAT(IF(variety.description IS NOT NULL, variety.description, 'null')) AS variety_descriptions
-    FROM ${CoinRepository.TABLE_NAME} AS coin
-    LEFT JOIN ${CoinStrikeRepository.COIN_STRIKE_TABLE_NAME} AS strike
-        ON coin.strike_id = strike.id
-    LEFT JOIN ${UsMintRepository.US_MINT_TABLE_NAME} AS mint
-        ON coin.mint_id = mint.id
-    LEFT JOIN ${CoinCompositionRepository.COIN_COMPOSITION_TABLE_NAME} AS composition
-        ON coin.composition_id = composition.id
-    LEFT JOIN ${CoinVarietyRepository.JOIN_TABLE_NAME} AS join_variety
-        ON coin.id = join_variety.coin_id
-    LEFT JOIN ${CoinVarietyRepository.TABLE_NAME} AS variety
-        ON join_variety.variety_id = variety.id`;
 
     /**
      * Finds a particular coin using the ID.
@@ -47,7 +15,7 @@ export default class CoinRepository extends Repository<Coin> {
     public async findById(id: number): Promise<Coin|void> {
         /** All the coins found with this ID. */
         const [rows] = (<mysql.RowDataPacket[]> await this.conn.query(
-            `${this.baseQuery} WHERE coin.id = ? GROUP BY coin.id LIMIT 1;`,
+            `SELECT * FROM ${CoinRepository.TABLE_NAME} WHERE coin.id = ?;`,
             [id]
         ));
         /** The coin record found when querying the database. */
@@ -68,7 +36,7 @@ export default class CoinRepository extends Repository<Coin> {
     public async findByUrlKey(urlKey: string, groupId: number) : Promise<Coin|void> {
         /** All the coins found with this ID. */
         const [rows] = (<mysql.RowDataPacket[]> await this.conn.query(
-            `${this.baseQuery} WHERE coin.url_key = ? AND coin.group_id = ? GROUP BY coin.id LIMIT 1;`,
+            `SELECT * FROM ${CoinRepository.TABLE_NAME} WHERE url_key = ? AND group_id = ?;`,
             [urlKey, groupId]
         ));
         /** The coin record found when querying the database. */
@@ -87,7 +55,7 @@ export default class CoinRepository extends Repository<Coin> {
      */
     public async findByGroupId(groupId: number): Promise<Coin[]> {
         const [rows] = (<mysql.RowDataPacket[]> await this.conn.query(
-            `${this.baseQuery} WHERE group_id = ? GROUP BY coin.id ORDER BY coin.year;`,
+            `SELECT * FROM ${CoinRepository.TABLE_NAME} WHERE group_id = ? ORDER BY year;`,
             [groupId]
         ));
 
@@ -187,45 +155,6 @@ export default class CoinRepository extends Repository<Coin> {
      * @inheritDoc
      */
     public recordToObject(coinRecord: mysql.RowDataPacket): Coin {
-        /** The strike record taken out of the coin record. */
-        const strikeRecord = {
-            id:           coinRecord.strike_id,
-            title:        coinRecord.strike_title,
-            abbreviation: coinRecord.strike_abbreviation,
-        };
-        /** The mint record from the coin record. */
-        const mintRecord = {
-            id:          coinRecord.mint_id,
-            mark:        coinRecord.mint_mark,
-            city:        coinRecord.mint_city,
-            state:       coinRecord.mint_state,
-            date_opened: coinRecord.mint_date_opened,
-            date_closed: coinRecord.mint_date_closed,
-        };
-        /** The coin composition record. */
-        const compositionRecord = {
-            id:          coinRecord.composition_id,
-            title:       coinRecord.composition_title,
-            weight:      coinRecord.composition_weight,
-            description: coinRecord.composition_description,
-        };
-        const varieties: CoinVarietyJson[] = [];
-        // Builds the coin record varities if there are variety IDs.
-        if (coinRecord.variety_ids) {
-            const variety_ids = coinRecord.variety_ids.split(',');
-            const variety_titles = coinRecord.variety_titles.split(',');
-            const variety_descriptions = coinRecord.variety_descriptions.split(',');
-
-            // Parses out the comma separated values.
-            variety_ids.forEach((val: any, index: number) => {
-                varieties.push({
-                    id: variety_ids[index],
-                    title: variety_titles[index],
-                    description: variety_descriptions[index] !== 'null' ? variety_descriptions[index] : null,
-                });
-            })
-        }
-
         /** The coin that is to be created. */
         return new Coin({
             id:              Number.parseInt(coinRecord.id),
@@ -234,15 +163,11 @@ export default class CoinRepository extends Repository<Coin> {
             year:            Number.parseInt(coinRecord.year),
             mintMarkId:      Number.parseInt(coinRecord.mint_mark_id),
             mintId:          Number.parseInt(coinRecord.mint_id),
-            mint:            new UsMintRepository(this.conn).recordToObject(mintRecord), // TODO Change
             additionalTitle: coinRecord.additional_title,
             strikeId:        Number.parseInt(coinRecord.strike_id),
-            strike:          new CoinStrikeRepository(this.conn).recordToObject(strikeRecord), // TODO Change
             mintage:         coinRecord.mintage ? Number.parseInt(coinRecord.mintage) : null,
             diameter:        coinRecord.diameter ? Number.parseInt(coinRecord.diameter) / 100 : null,
             compositionId:   Number.parseInt(coinRecord.composition_id),
-            composition:     new CoinCompositionRepository(this.conn).recordToObject(compositionRecord), // TODO Change
-            varieties:       varieties.map((varietyJson: CoinVarietyJson) => new CoinVariety(varietyJson))
         });
     }
 }

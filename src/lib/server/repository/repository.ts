@@ -12,7 +12,6 @@ export default abstract class Repository<EntityType> {
 
     create?(entity: EntityType): Promise<void>;
     createRange?(entities: EntityType[]): Promise<void>;
-    findAll?(): Promise<EntityType[]|[]>
     update?(entity: EntityType): Promise<void>;
     delete?(id: number): Promise<void>;
     
@@ -21,14 +20,42 @@ export default abstract class Repository<EntityType> {
      * 
      * @param id The ID being queried for.
      * 
-     * @returns  An entity found or nothing if it does not exist.
+     * @returns An entity found or nothing if it does not exist.
      */
-     async findById(id: number): Promise<EntityType|void> {
+    async findById(id: number): Promise<EntityType|void> {
         const [rows] = <mysql.RowDataPacket[]> await this.conn.query(
             `SELECT * FROM ${(<any>this.constructor).TABLE_NAME} WHERE id = ? LIMIT 1;`,
             [id]
         );
         return this.recordToObject(rows[0]);
+    }
+
+    /**
+     * Queries for all records in the table.
+     * 
+     * @returns All the entities found in the table.
+     */
+    async findAll(): Promise<EntityType[]> {
+        /** All of the U.S. Mints within the database. */
+        const [rows] = <mysql.RowDataPacket[]> await this.conn.query(
+            `SELECT * FROM ${(<any>this.constructor).TABLE_NAME};`,
+        );
+
+        /** The mints to be returned. */
+        const entities: EntityType[] = [];
+
+        // Loops the different rows found with the query.
+        for (const index in rows) {
+            /** The entity to be made. */
+            const entity = this.recordToObject(rows[index]);
+
+            // Ensure an entity was made.
+            if (entity) {
+                entities.push(entity);
+            }
+        }
+
+        return entities;
     }
 
     /**

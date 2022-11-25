@@ -1,6 +1,9 @@
 import type Joi from 'joi';
 
-/** The base class for Models. */
+/**
+ * @deprecated
+ * The base class for Models.
+ * */
 export default abstract class BaseModel<Entity> {
 
     /**

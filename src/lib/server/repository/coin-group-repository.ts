@@ -7,20 +7,6 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
     static readonly TABLE_NAME = 'cct_coin_groups';
 
     /**
-     * Finds a particular Coin Group by ID.
-     * 
-     * @param id 
-     */
-    public async findById(id: number): Promise<void|CoinGroup> {
-        /** The rows with the passed in ID. */
-        const [rows] = (<mysql2.RowDataPacket[]> await this.conn.query(
-            `SELECT * FROM ${CoinGroupRepository.TABLE_NAME} WHERE id = ?;`,
-            [id],
-        ));
-        return this.recordToObject(rows[0]);
-    }
-
-    /**
      * Finds a particular Coin Group using their unique URL key.
      * 
      * @param urlKey 
@@ -33,18 +19,6 @@ export default class CoinGroupRepository extends Repository<CoinGroup> {
             [urlKey],
         ));
         return this.recordToObject(rows[0]);
-    }
-
-    /**
-     * Finds all the coin groups within the database.
-     */
-    public async findAll(): Promise<CoinGroup[]> {
-        /** All of the rows found. */
-        const [rows] = (<mysql2.RowDataPacket[]> await this.conn.query(
-            `SELECT * FROM ${CoinGroupRepository.TABLE_NAME};`,
-        ));
-
-        return this.recordsToObject(rows);
     }
 
     /**

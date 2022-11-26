@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  cct-app:
+  cct_app:
     depends_on:
-      - cct-db
+      - cct_db
     build: 
       context: ./
       dockerfile: dockerfile
@@ -11,7 +11,7 @@ services:
       - /app/node_modules
     ports:
       - 3000:3000
-  cct-db:
+  cct_db:
     image: mysql:8.0.29
     volumes:
       - db:/var/lib/mysql

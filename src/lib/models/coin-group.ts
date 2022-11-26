@@ -1,73 +1,59 @@
-import BaseModel from "./base-model";
 import Joi from 'joi';
-import mediaConfig from '$lib/media-config';
+import MediaConfig from '$lib/media-config';
+import Entity from "$lib/models/entity";
 
 /** The structure for creating a CoinGroup model. */
-export interface CoinGroupJson {
-    id?: number,
-    urlKey?: string,
-    title?: string,
-    obverseImage?: string,
-    reverseImage?: string,
-    denomination?: number,
+export interface CoinGroupData {
+    id: number,
+    urlKey: string | null,
+    title: string,
+    obverseImage: string | null,
+    reverseImage: string | null,
+    denomination: number | null,
 }
 
+interface CoinGroup extends CoinGroupData {}
+
 /** The Coin Groups. */
-export default class CoinGroup extends BaseModel<CoinGroup> {
-    id: number;
-    /** The unique identifier to be used in URLs. */
-    urlKey: string | null;
-    /** The title of this particular coin group. */
-    title: string;
-    /** The filename for an image of the obverse for this coin. */
-    obverseImage: string | null;
-    /** The filename for an image of the reverse for this coin. */
-    reverseImage: string | null;
-    /** The denomination for the coin group. */
-    denomination: number | null;
+class CoinGroup extends Entity<CoinGroup, CoinGroupData> {
 
-    public constructor(groupJson: CoinGroupJson) {
-        super();
-
-        if (!groupJson.id
-            || !groupJson.title) {
-            throw new ReferenceError(`Missing required field.`);
-        }
-
-        this.id = groupJson.id;
-        this.urlKey = groupJson.urlKey || null;
-        this.title = groupJson.title;
-        this.obverseImage = groupJson.obverseImage || null;
-        this.reverseImage = groupJson.reverseImage || null;
-        this.denomination = groupJson.denomination || null;
-    }
-    
     /** @returns The path for this coin group's obverse image. */
     public getObverseImagePath(): string|undefined {
         if (!this.obverseImage) return this.getDefaultImagePath();
-        return `${mediaConfig.coinGroupImagePath}/${this.obverseImage}`
+        return `${MediaConfig.coinGroupImagePath}/${this.obverseImage}`
     }
 
     /** @returns The path for this coin group's reverse image. */
     public getReverseImagePath(): string|undefined {
         if (!this.reverseImage) return this.getDefaultImagePath();
-        return `${mediaConfig.coinGroupImagePath}/${this.reverseImage}`
+        return `${MediaConfig.coinGroupImagePath}/${this.reverseImage}`
     }
 
     /** @returns The default coin group image's path. */
     public getDefaultImagePath(): string {
-        return `${mediaConfig.coinGroupImagePath}/default.svg`;
+        return `${MediaConfig.coinGroupImagePath}/default.svg`;
     }
 
-    /** @inheritdoc */
+    /** @inheritDoc */
     public getSchema(): Joi.ObjectSchema<any> {
         return Joi.object({
-            id: Joi.number().integer().min(1).required(),
-            urlKey: Joi.string().pattern(/^[a-zA-Z][a-zA-Z0-9\-]*$/).allow(null),
-            title: Joi.string().required(),
-            obverseImage: Joi.string().allow(null),
-            reverseImage: Joi.string().allow(null),
-            denomination: Joi.number().min(0).allow(null),
+            id:           Joi.number()
+                             .integer()
+                             .min(1)
+                             .required(),
+            urlKey:       Joi.string()
+                             .pattern(/^[a-z][a-z0-9\-][a-z0-9]*$/)
+                             .allow(null),
+            title:        Joi.string(),
+            obverseImage: Joi.string()
+                             .allow(null),
+            reverseImage: Joi.string()
+                             .allow(null),
+            denomination: Joi.number()
+                             .min(0)
+                             .allow(null),
         });
     }
 }
+
+export default CoinGroup;

@@ -8,9 +8,9 @@ import 'dotenv/config';
  */
 export default async function createConnection(): Promise<mysql.Connection> {
     return await mysql.createConnection({
-        host: 'cct-db',
+        host:     process.env['DATABASE_HOST'],
         database: process.env['DATABASE_NAME'],
-        user: process.env['DATABASE_USER'],
+        user:     process.env['DATABASE_USER'],
         password: process.env['DATABASE_USER_PASSWORD'],
     });
 }

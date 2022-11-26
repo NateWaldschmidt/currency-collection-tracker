@@ -5,9 +5,9 @@ import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestEvent, RequestHandler } from "@sveltejs/kit";
 import * as bcrypt from 'bcrypt';
 
-export const POST: RequestHandler = async function(event: RequestEvent) {
+export const POST: RequestHandler = async function({ locals, request }) {
     // Checks if the user is already signed in.
-    if (event.locals.user) {
+    if (locals.user) {
         return new Response(null, {
             'status': 400,
             'statusText': 'You are already signed in to an account.',
@@ -15,7 +15,7 @@ export const POST: RequestHandler = async function(event: RequestEvent) {
     }
 
     /** The FormData received in the request. */
-    const formData = await event.request.formData();
+    const formData = await request.formData();
     /** The parts of the request body to search for. */
     const requestBody = {
         email: formData.get('email')?.toString(),
@@ -31,8 +31,7 @@ export const POST: RequestHandler = async function(event: RequestEvent) {
     }
 
     try {
-        const conn = await createConnection();
-        const userRepo = new UserRepository(conn);
+        const userRepo = new UserRepository(locals.connection);
         /** The user found with the email. */
         const user = await userRepo.findByEmail(requestBody.email);
 
@@ -41,7 +40,6 @@ export const POST: RequestHandler = async function(event: RequestEvent) {
 
         // Did not find a user.
         if (!user) {
-            conn.end();
             return new Response(null, {
                 'status': 400,
                 'statusText': ambiguousErrorMessage,
@@ -49,7 +47,6 @@ export const POST: RequestHandler = async function(event: RequestEvent) {
         }
         // Validates the user has all necessary components for generating a token.
         if (!user.id || !user.email || !user.hashedPassword || !user.displayName) {
-            conn.end();
             return new Response(null, {
                 'status': 500,
                 'statusText': 'There is a problem with this account, please contact an admin.',
@@ -73,14 +70,12 @@ export const POST: RequestHandler = async function(event: RequestEvent) {
                 lastName: user.lastName,
             }
 
-            conn.end();
             return new Response(null, {
                 headers: {
                     'Set-Cookie': Auth.createTokenCookie(tokenPayload, (currentDate + (tokenValidationTime * 60 * 1000))),
                 }
             });
         } else {
-            conn.end();
             return new Response(null, {
                 'status': 400,
                 'statusText': ambiguousErrorMessage,

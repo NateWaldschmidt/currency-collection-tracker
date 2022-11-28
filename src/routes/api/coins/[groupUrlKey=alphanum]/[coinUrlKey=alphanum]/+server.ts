@@ -1,25 +1,18 @@
 import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from './$types';
-import CoinRepository from "$lib/server/repository/coin-repository";
-import CoinGroupRepository from "$lib/server/repository/coin-group-repository";
+import Coin from "$lib/entities/coins/coin.entity";
 
 export const GET: RequestHandler = async function({ locals, params }) {
-    const coinGroupRepo = new CoinGroupRepository(locals.connection);
-    const group = await coinGroupRepo.findByUrlKey(params.groupUrlKey);
-
-    // Could not find the coin group.
-    if (!group) {
-        return new Response(null, {
-            'status': 404,
-            'statusText': `Could not find a coin group with the URL key ${params.groupUrlKey}.`,
-        });
-    }
-
-    const coinRepo = new CoinRepository(locals.connection);
-    const coin = await coinRepo.findByUrlKey(params.coinUrlKey, group.id);
+    const coinRepo = locals.dataSource.getRepository(Coin);
+    const coin = await coinRepo.findOne({
+        where: {
+            urlKey: params.coinUrlKey,
+            group: { urlKey: params.groupUrlKey },
+        }
+    })
 
     // Could not find the coin.
-    if (!group) {
+    if (!coin) {
         return new Response(null, {
             'status': 404,
             'statusText': `Could not find a coin with the URL key ${params.coinUrlKey} in the group ${params.groupUrlKey}.`,

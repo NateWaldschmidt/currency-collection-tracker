@@ -14,13 +14,14 @@
     {#each data.coinGroups as coinGroup}
         <Card tag="article">
             <Link href={`/coins/${coinGroup.urlKey}`}>
-                { coinGroup.title }
+                { coinGroup.label }
             </Link>
 
-            <div class="coin-images">
+            <!-- TODO Add images. -->
+            <!-- <div class="coin-images">
                 <img src="{coinGroup.getObverseImagePath()}" alt="{coinGroup.title} Obverse" />
                 <img src="{coinGroup.getReverseImagePath()}" alt="{coinGroup.title} Reverse" />
-            </div>
+            </div> -->
         </Card>
     {/each}
 </section>
@@ -36,20 +37,20 @@
         margin: 0 auto;
     }
 
-    .coin-images {
-        display: flex;
-        gap: 0.5rem;
+    // .coin-images {
+    //     display: flex;
+    //     gap: 0.5rem;
 
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        border-radius: var(--border-radius);
+    //     margin-top: 0.5rem;
+    //     padding: 0.5rem;
+    //     border-radius: var(--border-radius);
 
-        background-color: white;
+    //     background-color: white;
 
-        img {
-            aspect-ratio: 1/1;
-            width: 10rem;
-            max-width: 10rem;
-        }
-    }
+    //     img {
+    //         aspect-ratio: 1/1;
+    //         width: 10rem;
+    //         max-width: 10rem;
+    //     }
+    // }
 </style>

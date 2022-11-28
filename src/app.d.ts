@@ -1,6 +1,7 @@
 /// <reference types="@sveltejs/kit" />
 import { type TokenPayload}  from '$lib/server/utilities/auth';
 import mysql from 'mysql2/promise';
+import type { DataSource } from 'typeorm';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -9,7 +10,7 @@ declare global {
 	namespace App {
 		interface Locals {
 			user?:      TokenPayload,
-			connection: mysql.Connection,
+			dataSource: DataSource,
 		}
 		interface Session {
 			user?: TokenPayload,

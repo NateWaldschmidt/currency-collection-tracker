@@ -1,12 +1,12 @@
-import CoinStrike from "$lib/entities/coins/coin-strike.entity";
+import CoinGrade from "$lib/entities/coins/coin-grade.entity";
 import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async function({ locals }) {
-    const coinStrikeRepo = locals.dataSource.getRepository(CoinStrike);
+    const gradesRepo = locals.dataSource.getRepository(CoinGrade);
     
     return ResponseHelper.jsonResponse(
         'Successfully queried all coin strikes.',
-        await coinStrikeRepo.find(),
+        await gradesRepo.find(),
     );
 }

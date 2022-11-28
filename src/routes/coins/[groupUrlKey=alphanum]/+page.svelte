@@ -1,7 +1,5 @@
 <script lang="ts">
-    import type Coin from '$lib/models/coin';
-    import type CoinGroup from '$lib/models/coin-group';
-    import Table, {type TableColumn} from '$lib/components/table/table.svelte'
+    import Table, { type TableColumn } from '$lib/components/table/table.svelte'
     import { heading } from '$lib/stores/page-heading-store';
     import type { PageData } from './$types';
 
@@ -9,35 +7,35 @@
     export let data: PageData;
 
     /** The Groups of Coins. */
-    const coinGroup: CoinGroup = data.coinGroup;
+    const coinGroup = data.coinGroup;
     /** The coins apart of this group. */
-    const coins: Coin[] = data.coins;
+    const coins = data.coins;
 
-    heading.set(coinGroup.title)
+    heading.set(coinGroup.label)
 
     /** The columns to be rendered in the table.*/
     let tableColumns: TableColumn[] = [{
             headerCell: { label: 'Strike' },
-            dataCell: { dataKey: 'strike.title' },
+            dataCell: { dataKey: 'strike.label' },
         }, {
             headerCell: { label: 'Year' },
             dataCell: { dataKey: 'year' },
-            render: (_: any, coin: Coin) => coin.getFullTitle(),
+            // render: (_: any, coin) => coin.getFullTitle(),
         }, {
             headerCell: { label: 'Mintage' },
             dataCell: { dataKey: 'mintage' },
             alignment: 'right',
-            render: (_: any, coin: Coin) => coin.getMintageString(),
+            // render: (_: any, coin) => coin.getMintageString(),
         }, {
             headerCell: { label: 'Diameter' },
             dataCell: { dataKey: 'diameter' },
             alignment: 'right',
-            render: (_: any, coin: Coin) => coin.getDiameterString(),
+            // render: (_: any, coin) => coin.getDiameterString(),
         }, {
             headerCell: { label: 'Weight' },
             dataCell: { dataKey: 'composition.weight' },
             alignment: 'right',
-            render: (_: any, coin: Coin) => '0', //TODO Implement
+            // render: (_: any, coin) => '0', // TODO Implement
         },
     ];
 </script>

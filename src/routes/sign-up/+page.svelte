@@ -79,7 +79,7 @@
     </div>
 
     <div id="submit-container">
-        <Button type={"submit"}>Sign In</Button>
+        <Button type={"submit"}>Create Account</Button>
         <Link href={"/sign-in"} size={'xs'}>Already have an account? Sign in.</Link>
     </div>
 </form>

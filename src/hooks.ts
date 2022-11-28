@@ -1,6 +1,6 @@
 import cookie from 'cookie';
-import createConnection from '$lib/server/database/connection';
 import jwt from 'jsonwebtoken';
+import { AppDataSource } from "$lib/server/database/data-source";
 import 'dotenv/config';
 import type { TokenPayload } from '$lib/server/utilities/auth';
 import type { GetSession, Handle } from '@sveltejs/kit';
@@ -33,14 +33,16 @@ export const handle: Handle = async function ({ event, resolve }) {
         }
     }
 
-    // Attaches the Database connection.
-    event.locals.connection = await createConnection();
+    event.locals.dataSource = AppDataSource;
+    if (!event.locals.dataSource.isInitialized) {
+        await event.locals.dataSource.initialize();
+    }
 
     /** The response for this request. */
     const response = await resolve(event);
 
-    // Close the database connection.
-    await event.locals.connection.end();
+    // Close the connection.
+    event.locals.dataSource.destroy();
 
     return response;
 }

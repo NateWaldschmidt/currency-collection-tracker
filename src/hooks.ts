@@ -41,6 +41,9 @@ export const handle: Handle = async function ({ event, resolve }) {
     /** The response for this request. */
     const response = await resolve(event);
 
+    // Close the connection.
+    event.locals.dataSource.destroy();
+
     return response;
 }
 

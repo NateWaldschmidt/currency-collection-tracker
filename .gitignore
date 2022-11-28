@@ -1,9 +1,9 @@
-.DS_Store
-node_modules
-/build
 /.svelte-kit
+/.vscode
+/backups
+/build
 /package
+.DS_Store
 .env
 .env.*
-!.env.example
-/backups
+node_modules

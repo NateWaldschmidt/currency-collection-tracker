@@ -17,7 +17,18 @@ export default class Composition {
     @Column({ name: 'label', type: 'varchar', unique: true })
     label!: string;
 
-    @Column({ name: 'weight', type: 'int' })
+    @Column({
+        name: 'weight',
+        type: 'int', 
+        transformer: {
+            to (value: number) {
+                return value * 100;
+            },
+            from (value: number) {
+                return value / 100;
+            },
+        },
+    })
     weight!: number;
 
     @Column({ name: 'description', type: 'varchar' })

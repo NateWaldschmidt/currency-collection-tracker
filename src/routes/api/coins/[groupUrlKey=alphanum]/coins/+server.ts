@@ -11,8 +11,6 @@ export const GET: RequestHandler = async function({ locals, params }) {
         }
     });
 
-    console.log(coins);
-
     return ResponseHelper.jsonResponse(
         'Successfully queried all the coins.',
         coins,

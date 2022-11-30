@@ -1,19 +1,21 @@
-/** An interface for sending error responses. */
-interface ErrorResponse {
-    status: number,
-    body: {
-        error: string,
-        data?: any,
-    },
-}
+import CamelToKebab from "$lib/utilities/camel-to-kebab";
+import type { ValidationError } from "class-validator";
 
-/** An interface for sending success responses. */
-interface SuccessResponse {
-    status: number,
-    body: {
-        success: string,
-        data?: any,
-    }
+export interface ApiResponseBody {
+    /** A message relaying what happened with the request. */
+    message: string,
+    /** A brief summary of what the message is conveying. */
+    description?: string,
+    /** Any data corresponding to the response. */ 
+    data?: object,
+    // warnings?: {}, // TODO Maybe add warnings to the response body?
+    // If undefined, there were no errors.
+    errors?: {
+        /** The error that occurred. */
+        errors: string[],
+        /** The path to the field that the error occurred on. */
+        path: string,
+    }[],
 }
 
 /** Contains helper functions and constants for responses. */
@@ -22,78 +24,44 @@ export default class ResponseHelper {
     public static readonly GENERIC_SERVER_ERROR = 'There was a server error, please try again later.';
 
     /**
-     * A helper function for generating error messages.
-     * 
-     * @param status The HTTP status code for the response.
-     * @param message The error message for the response.
-     * @returns The ErrorResponse object to be sent as the response.
-     */
-    public static createErrorResponse(status: number, message: string): ErrorResponse {
-        return {
-            status: status,
-            body: {
-                error: message,
-            },
-        }
-    }
-
-    /**
-     * Creates a standardized success response with a message and any data if necessary.
-     * 
-     * @param message The success message to be sent.
-     * @param data    Any data associated with the request.
-     * 
-     * @returns A JSON stringified object. 
-     */
-    public static stringifySuccessResponse(message: string, data?: any): string {
-        return JSON.stringify({
-            success: message,
-            data: data,
-        });
-    }
-
-    /**
-     * A helper function for generating standardized success messages.
-     * 
-     * @param status The HTTP status code for the response.
-     * @param message The success message for the response.
-     * @returns The SuccessResponse object to be sent as the response.
-     */
-    public static createSuccessResponse(status: number, message: string, data?: any): SuccessResponse {
-        return {
-            status: status,
-            body: {
-                success: message,
-                data: data,
-            },
-        }
-    }
-
-    /**
      * Creates the Response object to send JSON data in endpoints.
      * 
-     * @param message The status text to be sent.
-     * @param status  The status to send with the response.
-     * @param data    Any data to send with the response.
+     * @param body
+     * @param status The status to send with the response.
+     * @param headers
      * @returns A JSON response.
      */
-    public static jsonResponse(message: string, data: any|null = null, status: number = 200): Response {
-        return new Response(JSON.stringify({
-            data: data,
-        }), {
-            status: status,
-            statusText: message,
-            headers: {'Content-Type': 'application/json'},
-        });
+    public static jsonResponse(body: ApiResponseBody, status: number = 200, headers?: HeadersInit): Response {
+        return new Response(
+            JSON.stringify(body),
+            {
+                status: status,
+                headers: {'Content-Type': 'application/json', ...headers},
+            }
+        );
     }
 
     /**
-     * @returns A Response for a generic server error.
+     * Returns a 422 response because the information was invalid. The structure of the data and everything was good
+     * though.
+     * 
+     * @param message 
+     * @returns 
      */
-    public static serverErrorResponse(): Response {
-        return new Response(null, {
-            'status': 500,
-            'statusText': this.GENERIC_SERVER_ERROR,
+    public static validationErrorResponse(message: string, errors: ValidationError[]): Response {
+        const body: ApiResponseBody = {
+            message: message,
+            errors: [],
+        };
+
+        // Format the validation errors.
+        errors.forEach((error: ValidationError) => {
+            body.errors?.push({
+                errors: Object.values(error.constraints || {} ),
+                path: CamelToKebab(error.property),
+            });
         });
+
+        return this.jsonResponse(body, 422);
     }
 }

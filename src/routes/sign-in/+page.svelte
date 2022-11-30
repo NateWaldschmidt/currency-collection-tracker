@@ -5,48 +5,49 @@
     import { goto } from '$app/navigation';
     import { heading } from '$lib/stores/page-heading-store';
     import { notifications } from '$lib/stores/notification-store';
+    import type { ApiResponseBody } from '$lib/server/utilities/response-helper';
     
-    heading.set('Sign In.');
+    heading.set('Sign In');
     /**
      * Handles submitting the form to log the user in.
      */
-    function handleSubmit(this: HTMLFormElement) {
-        const fd = new FormData(this);
-        const xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('load', () => {
-            const body = JSON.parse(xhr.responseText);
-            if (xhr.status === 200) {
-                notifications.add({
-                    id: '1',
-                    title: 'Successfully Signed In',
-                    message: 'Thank you for signing in.',
-                    type: 'success',
-                });
-                goto('/');
-            } else {
-                // Resets the password field(s).
-                this.querySelectorAll('input [type="password"]').forEach((element) => (<HTMLInputElement> element).value = '')
-
-                notifications.add({
-                    id: '1',
-                    title: 'Could Not Sign In',
-                    message: body.error,
-                    type: 'danger',
-                });
-            }
+    async function handleSubmit(this: HTMLFormElement) {
+        const response = await fetch('/api/sign-in', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new FormData(this),
         });
-        xhr.open('POST', '/api/sign-in');
-        xhr.send(fd);
+
+        const responseJson: ApiResponseBody = await response.json();
+
+        if (response.status === 200) {
+            notifications.add({
+                id: '1',
+                title: responseJson.message,
+                message: responseJson.description,
+                type: 'success',
+            });
+            goto('/');
+        } else {
+            // Resets the password field(s).
+            this.querySelectorAll('[type="password"]').forEach((element) => (<HTMLInputElement> element).value = '')
+
+            notifications.add({
+                id: '1',
+                title: responseJson.message,
+                message: responseJson.description,
+                type: 'danger',
+            });
+        }
     }
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
     <Input
-    label={"Email"}
-    type ={"email"}
-    id   ={"email"}
-    name ={"email"}
+    label={"Display Name"}
+    type ={"text"}
+    id   ={"display-name"}
+    name ={"display-name"}
     required
     />
 

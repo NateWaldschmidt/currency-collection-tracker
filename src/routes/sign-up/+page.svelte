@@ -1,37 +1,36 @@
 <script lang="ts">
-    import Input from '$lib/components/inputs/input.svelte';
     import Button from '$lib/components/inputs/button.svelte';
+    import Input from '$lib/components/inputs/input.svelte';
     import Link from '$lib/components/inputs/link.svelte';
-    import { notifications } from '$lib/stores/notification-store';
     import { goto } from '$app/navigation';
     import { heading } from '$lib/stores/page-heading-store';
+    import { notifications } from '$lib/stores/notification-store';
 
-    heading.set('Create an Account.');
+    heading.set('Account Creation');
 
-    function handleSubmit(e: SubmitEvent) {
-        /** The form being submitted. */
-        const form = (<HTMLFormElement> e.target);
-        /** The form data to be sent in the request. */
-        const fd = new FormData(form);
-        /** Handles sending the request. */
-        const xhr = new XMLHttpRequest();
+    async function handleSubmit(this: HTMLFormElement) {
+        const response = await fetch('/api/sign-up', {
+            method: 'POST',
+            body: new FormData(this),
+        });
+        const responseJson = await response.json();
 
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 201) {
-                const body = JSON.parse(xhr.responseText);
-                notifications.add({
-                    id: '1',
-                    title: 'Successfully Signed In',
-                    message: body.success,
-                    type: 'success',
-                });
-
-                goto('/');
-            }
-        })
-
-        xhr.open('POST', '/api/sign-up');
-        xhr.send(fd);
+        if (response.status === 201) {
+            notifications.add({
+                id: '1',
+                title: responseJson.message,
+                message: responseJson.description,
+                type: 'success',
+            });
+            goto('/');
+        } else {
+            notifications.add({
+                id: '1',
+                title: responseJson.message,
+                message: responseJson.description,
+                type: 'danger',
+            });
+        }
     }
 </script>
 

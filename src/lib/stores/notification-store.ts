@@ -9,7 +9,7 @@ export interface Notification {
     /** The title of the notification pop-up. */
     title?: string,
     /** The message for the notification. */
-    message: string,
+    message?: string,
 }
 
 /**

@@ -31,11 +31,13 @@ export const POST: RequestHandler = async function({ request, locals }) {
     user.email = requestBody['email'];
     user.displayName = requestBody['display-name'];
     user.password = await Auth.hashUserPassword(requestBody['password']); // TODO Check for requirements.
-    user.firstName = requestBody['first-name'];
-    user.lastName = requestBody['last-name'];
+    user.firstName = requestBody['first-name'] || undefined;
+    user.lastName = requestBody['last-name'] || undefined;
 
     /** Any errors found while validating the user information. */
     const errors = await validate(user);
+    
+    // All was good.
     if (errors.length > 0) {
         return ResponseHelper.validationErrorResponse('There was an error signing up.', errors);
     }
@@ -43,5 +45,5 @@ export const POST: RequestHandler = async function({ request, locals }) {
     // Create the user.
     locals.dataSource.manager.save(user);
 
-    return ResponseHelper.jsonResponse('Successfully created and signed into a user account.', null, 201);
+    return ResponseHelper.jsonResponse({ message: 'Successfully created and signed into a user account.' }, 201);
 }

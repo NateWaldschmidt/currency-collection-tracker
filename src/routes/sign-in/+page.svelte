@@ -14,7 +14,6 @@
     async function handleSubmit(this: HTMLFormElement) {
         const response = await fetch('/api/sign-in', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new FormData(this),
         });
 

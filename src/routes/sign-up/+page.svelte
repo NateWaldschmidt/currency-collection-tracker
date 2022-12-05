@@ -5,6 +5,7 @@
     import { goto } from '$app/navigation';
     import { heading } from '$lib/stores/page-heading-store';
     import { notifications } from '$lib/stores/notification-store';
+    import type { ApiResponseBody } from '$lib/server/utilities/response-helper';
 
     heading.set('Account Creation');
 
@@ -13,7 +14,7 @@
             method: 'POST',
             body: new FormData(this),
         });
-        const responseJson = await response.json();
+        const responseJson: ApiResponseBody = await response.json();
 
         if (response.status === 201) {
             notifications.add({

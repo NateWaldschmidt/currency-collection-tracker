@@ -14,6 +14,7 @@ import {
     IsPhoneNumber,
     IsOptional,
 } from "class-validator";
+import { UniqueIn } from "$lib/server/utilities/validation/unique";
 
 @Entity()
 export default class User {
@@ -27,11 +28,13 @@ export default class User {
         /^[a-zA-Z]+[a-zA-Z0-9\-]*$/,
         { message: 'Must start with a letter and can only contain letters, numbers, and hyphens.' }
     )
+    @UniqueIn(User)
     @Column({ name: 'display_name', type: 'varchar', unique: true })
     displayName!: string;
 
     @IsEmail(undefined, { message: 'Must be a valid email address.' })
     @IsOptional()
+    @UniqueIn(User)
     @Column({ name: 'email', type: 'varchar', unique: true, nullable: true })
     email?: string;
 
@@ -43,10 +46,12 @@ export default class User {
     @Column({ name: 'password', type: 'varchar' })
     password!: string;
 
+    @IsOptional()
     @Length(1, 255, { message: 'Must be between $constraint1 and $constraint2 characters.' })
-    @Column({ name: 'first_name', type: 'varchar' })
-    firstName!: string;
+    @Column({ name: 'first_name', type: 'varchar', nullable: true })
+    firstName?: string;
 
+    @IsOptional()
     @Length(1, 255, { message: 'Must be between $constraint1 and $constraint2 characters.' })
     @Column({ name: 'last_name', type: 'varchar', nullable: true })
     lastName?: string;

@@ -53,9 +53,3 @@ export const getSession: GetSession = function(event: RequestEvent) {
         },
     } : {};
 }
-
-export const handleError: HandleError = function({ error, event }) {
-    console.error(error);
-    // TODO Add logging.
-    return error;
-}

@@ -10,7 +10,7 @@ export interface ApiResponseBody {
     data?: object,
     // warnings?: {}, // TODO Maybe add warnings to the response body?
     // If undefined, there were no errors.
-    errors: {
+    errors?: {
         /** The path to the field that the error occurred on. */
         [path: string]: {
             /** The error that occurred. */
@@ -59,6 +59,9 @@ export default class ResponseHelper {
 
         // Format the validation errors.
         errors.forEach((error: ValidationError) => {
+            if (!body.errors) {
+                body.errors = {};
+            }
             body.errors[CamelToKebab(error.property)] = {
                 errors: Object.values(error.constraints || {} ),
             };

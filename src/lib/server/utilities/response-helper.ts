@@ -10,12 +10,15 @@ export interface ApiResponseBody {
     data?: object,
     // warnings?: {}, // TODO Maybe add warnings to the response body?
     // If undefined, there were no errors.
-    errors?: {
-        /** The error that occurred. */
-        errors: string[],
+    errors: {
         /** The path to the field that the error occurred on. */
-        path: string,
-    }[],
+        [path: string]: {
+            /** The error that occurred. */
+            errors: string[],
+            /** The bad value. */
+            value?: any,
+        },
+    },
 }
 
 /** Contains helper functions and constants for responses. */
@@ -51,15 +54,14 @@ export default class ResponseHelper {
     public static validationErrorResponse(message: string, errors: ValidationError[]): Response {
         const body: ApiResponseBody = {
             message: message,
-            errors: [],
+            errors: {},
         };
 
         // Format the validation errors.
         errors.forEach((error: ValidationError) => {
-            body.errors?.push({
+            body.errors[CamelToKebab(error.property)] = {
                 errors: Object.values(error.constraints || {} ),
-                path: CamelToKebab(error.property),
-            });
+            };
         });
 
         return this.jsonResponse(body, 422);

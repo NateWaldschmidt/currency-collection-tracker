@@ -8,10 +8,7 @@ import ResponseHelper from '$lib/server/utilities/response-helper';
 export const POST: RequestHandler = async function({ locals, request }) {
     // Checks if the user is already signed in.
     if (locals.user) {
-        return new Response(null, {
-            'status': 200,
-            'statusText': 'You are already signed in to an account.',
-        });
+        return ResponseHelper.jsonResponse({ message: 'You are already signed in to an account.' }, 200);
     }
 
     const requestBody = RequestHelper.serializeFormData(await request.formData());
@@ -38,19 +35,17 @@ export const POST: RequestHandler = async function({ locals, request }) {
                 lastName:    user.lastName,
             }
 
-            return new Response(null, {
-                headers: {
-                    'Set-Cookie': Auth.createTokenCookie(
-                        tokenPayload,
-                        (currentDate + (tokenValidationTime * 60 * 1000)),
-                    ),
-                }
+            return ResponseHelper.jsonResponse({ message: 'Successfully signed in to your account.' }, 200, {
+                'Set-Cookie': Auth.createTokenCookie(
+                    tokenPayload,
+                    (currentDate + (tokenValidationTime * 60 * 1000)),
+                ),
             });
         }
     }
 
     return ResponseHelper.jsonResponse(
-        { message: 'The email or password you entered is incorrect.' },
+        { message: 'The email or password you entered is incorrect.', errors: {} },
         422,
     );
 }

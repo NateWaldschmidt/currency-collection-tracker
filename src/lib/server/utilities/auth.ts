@@ -10,7 +10,7 @@ export interface TokenPayload {
     /** The expiration date/time. */
     exp: number,
     /** The user's unique email address. */
-    email: string,
+    email?: string,
     /** The user's unique display name. */
     displayName: string,
     /** The user's first name. */

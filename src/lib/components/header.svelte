@@ -4,6 +4,8 @@
     import Button from '$lib/components/inputs/button.svelte';
     import Link from '$lib/components/inputs/link.svelte';
 
+    const user = $session.user;
+
     /**
      * Handles the sign out of a user.
      */
@@ -37,12 +39,12 @@
             <Link href="/collections">Collections</Link>
         </div>
         <div id="account-info">
-            {#if !$session.user}
+            {#if !user}
                 <Link href="/sign-in">Sign In</Link>
                 <Button href="/sign-up">Create Account</Button>
             {:else}
-                <img src="" alt={`${$session.user.displayName}'s Profile Photo`}>
-                <p>{ $session.user.displayName }</p>
+                <img src="" alt={`${user.displayName}'s Profile Photo`}>
+                <p>{ user.displayName }</p>
                 <Button on:click={signOut}>Sign Out</Button>
             {/if}
         </div>

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from "$lib/server/database/data-source";
 import 'dotenv/config';
 import type { TokenPayload } from '$lib/server/utilities/auth';
-import type { GetSession, Handle } from '@sveltejs/kit';
+import type { GetSession, Handle, HandleError, RequestEvent } from '@sveltejs/kit';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export const handle: Handle = async function ({ event, resolve }) {
@@ -23,32 +23,26 @@ export const handle: Handle = async function ({ event, resolve }) {
 
             /** Sets some user data to be used within the different routes. */
             event.locals.user = {
-                id:          tokenPayload.id,
-                email:       tokenPayload.email,
+                id: tokenPayload.id,
+                email: tokenPayload.email,
                 displayName: tokenPayload.displayName,
-                firstName:   tokenPayload.firstName,
-                lastName:    tokenPayload.lastName,
-                exp:         tokenPayload.exp,
+                firstName: tokenPayload.firstName,
+                lastName: tokenPayload.lastName,
+                exp: tokenPayload.exp,
             }
         }
     }
 
     event.locals.dataSource = AppDataSource;
-    if (!event.locals.dataSource.isInitialized) {
-        await event.locals.dataSource.initialize();
-    }
 
     /** The response for this request. */
     const response = await resolve(event);
-
-    // Close the connection.
-    event.locals.dataSource.destroy();
 
     return response;
 }
 
 /** @type {import('@sveltejs/kit').GetSession} */
-export const getSession: GetSession = function(event) {
+export const getSession: GetSession = function(event: RequestEvent) {
     return event?.locals?.user ? {
         user: {
             id:          event.locals.user.id,

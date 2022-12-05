@@ -11,9 +11,11 @@
 
 <style lang="scss">
     #notifications-container {
-        position: fixed; top: 1rem;
+        position: fixed;
+        top: 1rem;
         top: 1rem;
         right: 1rem;
+        z-index: 1;
 
         width: 90%;
         max-width: 27.5rem;

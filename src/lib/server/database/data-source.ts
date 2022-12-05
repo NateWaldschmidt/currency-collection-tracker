@@ -38,3 +38,5 @@ export const AppDataSource = new DataSource({
     entityPrefix: 'ct_',
     subscribers:  [],
 });
+
+AppDataSource.initialize();

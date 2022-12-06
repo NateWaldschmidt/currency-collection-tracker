@@ -3,9 +3,8 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from "$lib/server/database/data-source";
 import 'dotenv/config';
 import type { TokenPayload } from '$lib/server/utilities/auth';
-import type { GetSession, Handle, HandleError, RequestEvent } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 
-/** @type {import('@sveltejs/kit').Handle} */
 export const handle: Handle = async function ({ event, resolve }) {
     // Ensures the access token is set.
     if (!process.env['ACCESS_TOKEN_SECRET']) {
@@ -39,17 +38,4 @@ export const handle: Handle = async function ({ event, resolve }) {
     const response = await resolve(event);
 
     return response;
-}
-
-/** @type {import('@sveltejs/kit').GetSession} */
-export const getSession: GetSession = function(event: RequestEvent) {
-    return event?.locals?.user ? {
-        user: {
-            id:          event.locals.user.id,
-            email:       event.locals.user.email,
-            displayName: event.locals.user.displayName,
-            firstName:   event.locals.user.firstName,
-            lastName:    event.locals.user.lastName,
-        },
-    } : {};
 }

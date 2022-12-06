@@ -6,7 +6,7 @@ export const GET: RequestHandler = async function({ locals }) {
     const compositionRepository = locals.dataSource.getRepository(Composition);
 
     return ResponseHelper.jsonResponse(
-        'Successfully queried all coin compositions.',
-        await compositionRepository.find(),
+        { message: 'Successfully queried all coin compositions.', data: await compositionRepository.find() },
+        200,
     );
 }

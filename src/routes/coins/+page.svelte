@@ -1,10 +1,9 @@
 <script lang="ts">
     import Link from '$lib/components/inputs/link.svelte';
-    import Card from '$lib/components/card.svelte';
     import { heading } from '$lib/stores/page-heading-store';
     import type { PageData } from './$types';
 
-    heading.set('Coins')
+    heading.set('Coins');
 
     /** The data loaded into the page. */
     export let data: PageData;
@@ -12,29 +11,25 @@
 
 <section class="coin-groups">
     {#each data.coinGroups as coinGroup}
-        <Card tag="article">
-            <Link href={`/coins/${coinGroup.urlKey}`}>
-                { coinGroup.label }
-            </Link>
-
-            <!-- TODO Add images. -->
-            <!-- <div class="coin-images">
-                <img src="{coinGroup.getObverseImagePath()}" alt="{coinGroup.title} Obverse" />
-                <img src="{coinGroup.getReverseImagePath()}" alt="{coinGroup.title} Reverse" />
-            </div> -->
-        </Card>
+        <Link href={`/coins/${coinGroup.urlKey}`}>
+            { coinGroup.label }
+        </Link>
     {/each}
 </section>
 
 <style lang="scss">
     .coin-groups {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, min(15rem, 100%));
+        grid-gap: 0.5rem;
+        justify-content: center;
 
-        max-width: var(--wrap-width);
-        margin: 0 auto;
+        & > :global(*) {
+            padding: 0.5rem 0;
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+            background-color: var(--color-neutral-light);
+        }
     }
 
     // .coin-images {

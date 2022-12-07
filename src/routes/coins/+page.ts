@@ -1,8 +1,12 @@
+import CoinGroup from '$lib/entities/coins/coin-group.entity';
 import type { PageLoad } from './$types';
 
-/** The data to be loaded for each of the coin groups on the /coins route. */
 export const load: PageLoad = async function({ fetch }) {
+    const coinGroupResponse = await fetch('/api/coins/groups');
+    const coinGroups = await coinGroupResponse.json();
+
     return {
-        coinGroups: (await (await fetch('/api/coins/groups')).json()).data
-    };
+        // TODO Try to type the API Response body.
+        coinGroups: coinGroups.data.map((coinGroup: any) => Object.assign(CoinGroup, coinGroup)),
+    }
 }

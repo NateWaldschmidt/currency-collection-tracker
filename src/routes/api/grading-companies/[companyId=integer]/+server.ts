@@ -1,17 +1,17 @@
-import GradingCompanyRepository from "$lib/server/repository/grading-company-repository";
+import GradingCompany from "$lib/entities/coins/grading-company.entity";
 import ResponseHelper from "$lib/server/utilities/response-helper";
 import type { RequestHandler } from "@sveltejs/kit/types/internal";
 
 /** Finds a particular grading company by ID. */
-export const GET: RequestHandler = async function({ locals, params }) {
+export const GET: RequestHandler = async function ({ locals, params }) {
     /** The passed in coin group ID. */
-    const companyId = Number.parseInt(params.companyId);
+    const companyId = Number.parseInt(params.companyId || '0');
 
-    const gradingCompanyRepo = new GradingCompanyRepository(locals.connection);
-    const gradingCompanies   = await gradingCompanyRepo.findById(companyId);
+    const gradingCompanyRepo = locals.dataSource.getRepository(GradingCompany);
+    const gradingCompanies = await gradingCompanyRepo.findBy({ id: companyId });
 
     return ResponseHelper.jsonResponse(
-        `Successfully queried for the grading company with the ID ${companyId}.`,
-        gradingCompanies,
+        { message: `Successfully queried for the grading company with the ID ${companyId}.` , data: gradingCompanies },
+        200,
     );
 }

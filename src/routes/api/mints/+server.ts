@@ -7,7 +7,7 @@ export const GET: RequestHandler = async function({ locals }) {
     const mintRepo = locals.dataSource.getRepository(Mint);
 
     return ResponseHelper.jsonResponse(
-        'Successfully queried all U.S mints.',
-        await mintRepo.find(),
+        { message: 'Successfully queried all U.S mints.', data: await mintRepo.find() },
+        200,
     );
 }

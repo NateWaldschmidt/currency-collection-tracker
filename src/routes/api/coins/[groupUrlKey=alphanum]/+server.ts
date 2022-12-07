@@ -4,18 +4,18 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async function({ locals, params }) {
     const coinGroupRepo = locals.dataSource.getRepository(CoinGroup);
-    const group         = await coinGroupRepo.findOneBy({ urlKey: params.groupUrlKey });
+    const group = await coinGroupRepo.findOneBy({ urlKey: params.groupUrlKey });
 
     // Could not find the coin group.
     if (!group) {
-        return new Response(null, {
-            'status': 404,
-            'statusText': `Could not find a coin group with the URL key ${params.groupUrlKey}.`,
-        });
+        return ResponseHelper.jsonResponse(
+            { message: `Could not find a coin group with the URL key ${params.groupUrlKey}.` },
+            404,
+        );
     }
 
     return ResponseHelper.jsonResponse(
-        'Successfully queried the coin group.',
-        group,
+        { message: 'Successfully queried the coin group.', data: group },
+        200,
     );
 }

@@ -1,12 +1,9 @@
-import Material from "$lib/entities/material.entity";
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToMany,
-    JoinTable,
 } from "typeorm"
 
 @Entity()

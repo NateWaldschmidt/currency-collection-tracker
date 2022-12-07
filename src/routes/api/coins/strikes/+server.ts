@@ -6,7 +6,7 @@ export const GET: RequestHandler = async function({ locals }) {
     const coinStrikeRepo = locals.dataSource.getRepository(CoinStrike);
     
     return ResponseHelper.jsonResponse(
-        'Successfully queried all coin strikes.',
-        await coinStrikeRepo.find(),
+        { message: 'Successfully queried all coin strikes.', data: await coinStrikeRepo.find() },
+        200,
     );
 }

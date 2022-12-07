@@ -5,14 +5,10 @@ import type { RequestHandler } from "@sveltejs/kit";
 /** Finds all the coins for a particular group. */
 export const GET: RequestHandler = async function({ locals, params }) {
     const coinRepo = locals.dataSource.getRepository(Coin);
-    const coins    = await coinRepo.find({
-        where: {
-            group: { urlKey: params.groupUrlKey }
-        }
-    });
+    const coins = await coinRepo.findBy({ group: { urlKey: params.groupUrlKey }});
 
     return ResponseHelper.jsonResponse(
-        'Successfully queried all the coins.',
-        coins,
+        { message: 'Successfully queried all the coins.', data: coins },
+        200,
     );
 }

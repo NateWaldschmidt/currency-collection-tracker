@@ -1,17 +1,18 @@
 <script lang="ts">
-    import { session } from '$app/stores';
+    import { page } from '$app/stores';
     import { notifications } from '$lib/stores/notification-store';
     import Button from '$lib/components/inputs/button.svelte';
     import Link from '$lib/components/inputs/link.svelte';
 
-    const user = $session.user;
+    /** The signed in user. */
+    const user = $page.data.user;
 
     /**
      * Handles the sign out of a user.
      */
     const signOut = async function() {
         // Sends the request to sign out.
-        const signOutResponse = await fetch('/api/sign-out', {method: 'put'});
+        const signOutResponse = await fetch('/api/sign-out', { method: 'PUT' });
 
         if (signOutResponse.status == 200) {
             notifications.add({

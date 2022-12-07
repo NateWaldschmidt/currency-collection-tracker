@@ -1,7 +1,7 @@
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
-import { AppDataSource } from "$lib/server/database/data-source";
 import 'dotenv/config';
+import { AppDataSource } from "$lib/server/database/data-source";
 import type { TokenPayload } from '$lib/server/utilities/auth';
 import type { Handle } from '@sveltejs/kit';
 

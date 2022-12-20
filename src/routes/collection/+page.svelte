@@ -24,7 +24,7 @@
                         <dd>{ coin.grade ? coin.grade.label : 'Un-Graded' }</dd>
 
                         <dt>Set</dt>
-                        <dd>{ coin.collection ? coin.collection.label : 'Unassigned' }</dd>
+                        <dd>{ coin.collectionSet ? coin.collectionSet.label : 'Unassigned' }</dd>
                     </dl>
                 </li>
             {/if}
@@ -49,7 +49,7 @@
                         <dd>{ coin.grade ? coin.grade.label : 'Un-Graded' }</dd>
 
                         <dt>Set</dt>
-                        <dd>{ coin.collection ? coin.collection.label : 'Unassigned' }</dd>
+                        <dd>{ coin.collectionSet ? coin.collectionSet.label : 'Unassigned' }</dd>
                     </dl>
                 </li>
             {/if}

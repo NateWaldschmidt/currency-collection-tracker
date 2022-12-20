@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { AppDataSource } from "$lib/server/database/data-source";
 import type { TokenPayload } from '$lib/server/utilities/auth';
-import type { Handle } from '@sveltejs/kit';
+import { error, type Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async function ({ event, resolve }) {
     // Ensures the access token is set.
@@ -33,6 +33,15 @@ export const handle: Handle = async function ({ event, resolve }) {
     }
 
     event.locals.dataSource = AppDataSource;
+
+    if (event.url.pathname.startsWith('/api/users')) {
+        if (!event.locals.user) {
+            throw error(401, 'You must be authenticated to view user routes.');
+        }
+        if (event.locals.user.id.toString() !== event.params.userId) {
+            throw error(403, 'You are not allowed to view this user.');
+        }
+    }
 
     /** The response for this request. */
     const response = await resolve(event);

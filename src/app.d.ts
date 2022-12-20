@@ -1,6 +1,5 @@
 /// <reference types="@sveltejs/kit" />
 import { type TokenPayload}  from '$lib/server/utilities/auth';
-import mysql from 'mysql2/promise';
 import type { DataSource } from 'typeorm';
 
 // See https://kit.svelte.dev/docs/types#app
@@ -11,9 +10,6 @@ declare global {
 		interface Locals {
 			user?:      TokenPayload,
 			dataSource: DataSource,
-		}
-		interface Session {
-			user?: TokenPayload,
 		}
 	}
 }

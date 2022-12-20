@@ -37,7 +37,7 @@
         </div>
         <div id="center-navigation">
             <Link href="/coins">Coins</Link>
-            <Link href="/collections">Collections</Link>
+            <Link href="/collection">Collections</Link>
         </div>
         <div id="account-info">
             {#if !user}

@@ -13,6 +13,9 @@ import Coin from "$lib/entities/coins/coin.entity";
 import GradingCompany from "$lib/entities/coins/grading-company.entity";
 import Mint from "$lib/entities/coins/mint.entity";
 
+import CollectionSet from "$lib/entities/collection-set.entity";
+import UserCoin from "$lib/entities/coins/user-coin.entity";
+
 export const AppDataSource = new DataSource({
     type:         "mysql",
     host:         process.env['DATABASE_HOST'],
@@ -34,6 +37,8 @@ export const AppDataSource = new DataSource({
         Coin,
         GradingCompany,
         Mint,
+        CollectionSet,
+        UserCoin,
     ],
     entityPrefix: 'ct_',
     subscribers:  [],

@@ -4,6 +4,7 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
+    OneToMany,
 } from "typeorm";
 import {
     Length,
@@ -14,7 +15,8 @@ import {
     IsPhoneNumber,
     IsOptional,
 } from "class-validator";
-import { UniqueIn } from "$lib/server/utilities/validation/unique";
+import CollectionSet from "$lib/entities/collection-set.entity";
+import UserCoin from "$lib/entities/coins/user-coin.entity";
 
 @Entity()
 export default class User {
@@ -28,13 +30,11 @@ export default class User {
         /^[a-zA-Z]+[a-zA-Z0-9\-]*$/,
         { message: 'Must start with a letter and can only contain letters, numbers, and hyphens.' }
     )
-    @UniqueIn(User)
     @Column({ name: 'display_name', type: 'varchar', unique: true })
     displayName!: string;
 
     @IsEmail(undefined, { message: 'Must be a valid email address.' })
     @IsOptional()
-    @UniqueIn(User)
     @Column({ name: 'email', type: 'varchar', unique: true, nullable: true })
     email?: string;
 
@@ -55,6 +55,12 @@ export default class User {
     @Length(1, 255, { message: 'Must be between $constraint1 and $constraint2 characters.' })
     @Column({ name: 'last_name', type: 'varchar', nullable: true })
     lastName?: string;
+
+    @OneToMany(() => CollectionSet, (collectionSet) => collectionSet.user)
+    collectionSets!: CollectionSet[];
+
+    @OneToMany(() => UserCoin, (coin) => coin.user)
+    coins!: UserCoin[];
 
     @IsDate()
     @IsOptional()

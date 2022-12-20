@@ -23,7 +23,6 @@ export default class Coin {
     urlKey!: string;
 
     @ManyToOne(() => CoinStrike, (strike) => strike.id, { eager: true })
-    @JoinColumn({ name: 'strike_id' })
     strike!: CoinStrike;
 
     @ManyToOne(() => CoinGroup, (group) => group.id, { eager: true })
@@ -45,7 +44,6 @@ export default class Coin {
     varieties?: CoinVariety[];
 
     @ManyToOne(() => Mint, (mint) => mint.id, { nullable: true, eager: true })
-    @JoinColumn({ name: 'mint_id' })
     mint?: Mint;
 
     @Column({
@@ -93,4 +91,34 @@ export default class Coin {
 
     @UpdateDateColumn({ name: 'date_updated', type: 'datetime' })
     dateUpdated!: Date;
+
+    /**
+     * Combines the coin's year and mint mark if the coin has a mint mark.
+     */
+    getYearMintMark(): string {
+        let yearMintMark = this.year?.toString();
+
+        if (this.mintMark) {
+            if (this.mintMark.mark) {
+                yearMintMark += `-${this.mintMark.mark}`;
+            }
+        }
+
+        return yearMintMark || '';
+    }
+
+    /**
+     * Formatted as GroupLabel Year-MintMark AdditionalTitle.
+     */
+    getFullTitle(): string {
+        return `${this.group.label} ${this.getYearMintMark()} ${this.additionalTitle || ''}`;
+    }
+
+
+    /**
+     * Adds commas to the mintage.
+     */
+    getHumanMintage(): string {
+        return this.mintage?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || '';
+    }
 }

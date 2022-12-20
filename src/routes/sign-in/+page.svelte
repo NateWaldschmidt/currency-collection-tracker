@@ -2,7 +2,6 @@
     import Button from '$lib/components/inputs/button.svelte';
     import Input from '$lib/components/inputs/input.svelte';
     import Link from '$lib/components/inputs/link.svelte';
-    import { goto } from '$app/navigation';
     import { heading } from '$lib/stores/page-heading-store';
     import { notifications } from '$lib/stores/notification-store';
     import type { ApiResponseBody } from '$lib/server/utilities/response-helper';
@@ -26,7 +25,7 @@
                 message: responseJson.description,
                 type: 'success',
             });
-            goto('/');
+            window.location.replace('/');
         } else {
             // Resets the password field(s).
             this.querySelectorAll('[type="password"]').forEach((element) => (<HTMLInputElement> element).value = '')

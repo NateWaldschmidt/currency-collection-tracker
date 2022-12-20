@@ -20,6 +20,7 @@
                 message: 'Successfully signed out.',
                 type: 'success',
             });
+            window.location.replace('/');
         } else {
             notifications.add({
                 id: '1',
